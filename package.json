@@ -1,0 +1,11 @@
+{
+  "name": "payment-system",
+  "private": true,
+  "workspaces": [
+    "apps/api",
+    "packages/shared"
+  ],
+  "scripts": {
+    "dev": "npm run dev --workspace apps/api"
+  }
+}

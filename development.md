@@ -22,13 +22,13 @@ References: [BACKEND.md](BACKEND.md) · [SCREEN_FUNCTIONALITY.md](SCREEN_FUNCTIO
 
 ## Phase 1 — Project scaffolding
 
-- ❌ 1.1 `git init` the repo; add `.gitignore`, first commit of the basepoint
-- ❌ 1.2 Repo layout per BACKEND.md §4: `apps/api/` (backend), `apps/web/` (move `ui/` here), `packages/shared/` (DTOs)
-- ❌ 1.3 Backend skeleton — Node 22 + TypeScript (Express or NestJS), config loading, `GET /health`
-- ❌ 1.4 Dev database — SQLite (file-based; keeps the mock milestone Postgres-free) with migrations for: `chargers`, `sessions`, `payment_intents`, `provider_events`
-- ❌ 1.5 Seed data — one virtual site + charger `CHG-0042` (CCS2, 60 kW, ₱48.50/kWh tariff, ₱1,500 hold) + its `qr_slug`
-- ❌ 1.6 Static serving of the PWA from the API process (one origin — no CORS, one URL for the phone)
-- ❌ 1.7 `.claude/launch.json` dev-server entry so the app runs with one command
+- ✅ 1.1 `git init` the repo; add `.gitignore`, first commit of the basepoint
+- ✅ 1.2 Repo layout per BACKEND.md §4: `apps/api/` (backend), `apps/web/` (moved from `ui/`), `packages/shared/` (DTOs)
+- ✅ 1.3 Backend skeleton — Node + TypeScript + Express (module boundaries as folders; framework-agnostic core), config loading, `GET /health`
+- ✅ 1.4 Dev database — SQLite via built-in `node:sqlite`, migration runner (`PRAGMA user_version`), tables: `chargers`, `connectors`, `sessions`, `payment_intents`, `provider_events`
+- ✅ 1.5 Seed data — one virtual site + charger `CHG-0042` (CCS2, 60 kW, ₱48.50/kWh tariff, ₱1,500 hold) + `qr_slug` `chg-0042-a1b2`
+- ✅ 1.6 Static serving of the PWA from the API process (one origin — no CORS, one URL for the phone)
+- ✅ 1.7 `.claude/launch.json` dev-server entry (`app` → `npm run dev`, port 3000)
 
 ## Phase 2 — Sessions module + charger registry (API surface the UI needs)
 
