@@ -1,0 +1,67 @@
+<!doctype html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:wght@600;700&family=Instrument+Sans:wght@400;500;600;700&family=Space+Mono:wght@400;700&display=swap">
+  <style>
+    body { margin: 0; background: #F6F8F7; color: #16211D; font-family: "Instrument Sans", "Segoe UI", system-ui, sans-serif; }
+    a { color: #086A53; } a:hover { color: #0A3A2E; }
+  </style>
+</helmet>
+<div style="width: 390px; height: 844px; box-sizing: border-box; display: flex; flex-direction: column; gap: 20px; padding: 64px 24px 36px 24px; background: #F6F8F7;">
+  <div style="display: flex; flex-direction: column; align-items: center; gap: 12px;">
+    <div style="width: 64px; height: 64px; border-radius: 999px; background: #DDF0EA; display: flex; align-items: center; justify-content: center;">
+      <svg width="30" height="30" viewBox="0 0 24 24" fill="none"><path d="M5 12.5 L10 17.5 L19 7" stroke="#0B8A6B" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" fill="none"></path></svg>
+    </div>
+    <div style="font-family: 'Bricolage Grotesque', 'Segoe UI', system-ui, sans-serif; font-weight: 700; font-size: 25px;">Charging complete</div>
+    <div style="display: flex; flex-direction: column; align-items: center; gap: 4px;">
+      <div style="font-family: 'Bricolage Grotesque', 'Segoe UI', system-ui, sans-serif; font-weight: 700; font-size: 46px; color: #B26B3B; font-variant-numeric: tabular-nums;">₱892.40</div>
+      <div style="font-size: 13.5px; color: #5A6B64;">paid via Maya Wallet · Aug 19, 2026 · 3:08 PM</div>
+    </div>
+  </div>
+  <div style="background: #FFFFFF; border: 1px solid #D9E2DD; border-radius: 16px; padding: 18px; display: flex; flex-direction: column; gap: 12px;">
+    <div style="display: flex; flex-direction: row; justify-content: space-between;">
+      <div style="font-size: 14px; color: #5A6B64;">Energy delivered</div>
+      <div style="font-family: 'Space Mono', Consolas, monospace; font-size: 13.5px; font-variant-numeric: tabular-nums;">18.4 kWh · 38 min</div>
+    </div>
+    <div style="display: flex; flex-direction: row; justify-content: space-between;">
+      <div style="font-size: 14px; color: #5A6B64;">Rate</div>
+      <div style="font-family: 'Space Mono', Consolas, monospace; font-size: 13.5px; font-variant-numeric: tabular-nums;">₱48.50 / kWh</div>
+    </div>
+    <div style="height: 1px; background: #D9E2DD;"></div>
+    <div style="display: flex; flex-direction: row; justify-content: space-between;">
+      <div style="font-size: 14px; color: #5A6B64;">Hold placed</div>
+      <div style="font-family: 'Space Mono', Consolas, monospace; font-size: 13.5px; font-variant-numeric: tabular-nums;">₱1,500.00</div>
+    </div>
+    <div style="display: flex; flex-direction: row; justify-content: space-between;">
+      <div style="font-size: 14px; color: #086A53;">Hold released</div>
+      <div style="font-family: 'Space Mono', Consolas, monospace; font-size: 13.5px; color: #086A53; font-variant-numeric: tabular-nums;">₱607.60</div>
+    </div>
+  </div>
+  <div style="background: #DDF0EA; border-radius: 16px; padding: 14px 18px; display: flex; flex-direction: row; align-items: center; gap: 10px;">
+    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" style="flex-shrink: 0;"><path d="M12 21 C7 17 4 13.5 4 9.8 A5 5 0 0 1 12 6 A5 5 0 0 1 20 9.8 C20 13.5 17 17 12 21 Z" stroke="#086A53" stroke-width="1.7" stroke-linejoin="round" fill="none"></path></svg>
+    <div style="font-size: 13px; color: #0A3A2E; line-height: 1.45;">About 110 km of range added · ~13 kg CO₂ avoided vs gasoline (est.)</div>
+  </div>
+  <div style="display: flex; flex-direction: row; align-items: center; justify-content: space-between; padding: 0 4px;">
+    <div style="display: flex; flex-direction: column; gap: 1px;">
+      <div style="font-size: 12px; color: #5A6B64;">Official receipt · sent to +63 917 ··· 4482</div>
+      <div style="font-family: 'Space Mono', Consolas, monospace; font-size: 13px;">OR-2026-081942</div>
+    </div>
+    <a href="#" style="font-size: 13.5px; font-weight: 600; min-height: 44px; display: flex; align-items: center; padding: 0 8px;">Download PDF</a>
+  </div>
+  <div style="flex-grow: 1;"></div>
+  <div style="height: 56px; background: #086A53; border-radius: 14px; display: flex; align-items: center; justify-content: center; color: #FFFFFF; font-weight: 700; font-size: 16px;">Done</div>
+</div>
+</x-dc>
+<script data-dc-script data-props='{"$preview":{"width":390,"height":844}}'>
+class Component extends DCLogic {
+  renderVals() { return {}; }
+}
+</script>
+</body>
+</html>

@@ -1,0 +1,76 @@
+<!doctype html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Sora:wght@600;700&family=Manrope:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap">
+  <style>
+    body { margin: 0; background: #0B1120; color: #EDF1FA; font-family: "Manrope", "Segoe UI", system-ui, sans-serif; }
+    a { color: #38C8F0; } a:hover { color: #6FDAF6; }
+  </style>
+</helmet>
+<div style="width: 390px; height: 844px; box-sizing: border-box; display: flex; flex-direction: column; gap: 18px; padding: 56px 24px 40px 24px; background: #0B1120;">
+  <div style="display: flex; flex-direction: row; align-items: center; justify-content: space-between;">
+    <div style="display: flex; flex-direction: column; gap: 2px;">
+      <div style="font-family: 'Sora', 'Segoe UI', system-ui, sans-serif; font-weight: 700; font-size: 22px;">Charging</div>
+      <div style="font-size: 13px; color: #8B96B0;">Ayala Malls Manila Bay · Bay 14</div>
+    </div>
+    <div style="font-family: 'JetBrains Mono', Consolas, monospace; font-size: 11px; letter-spacing: 0.06em; color: #8B96B0; border: 1px solid #24304A; padding: 6px 12px; border-radius: 999px;">CHG-0042</div>
+  </div>
+  <div style="display: flex; flex-direction: column; align-items: center; gap: 2px;">
+    <svg width="248" height="248" viewBox="0 0 248 248" fill="none">
+      <defs>
+        <linearGradient id="ringgrad" x1="0" y1="0" x2="1" y2="1">
+          <stop offset="0" stop-color="#38C8F0"></stop>
+          <stop offset="1" stop-color="#4D7CFE"></stop>
+        </linearGradient>
+      </defs>
+      <circle cx="124" cy="124" r="104" stroke="#24304A" stroke-width="14" fill="none"></circle>
+      <circle cx="124" cy="124" r="104" stroke="url(#ringgrad)" stroke-width="14" fill="none" stroke-linecap="round" stroke-dasharray="444.4 653.5" transform="rotate(-90 124 124)"></circle>
+      <text x="124" y="116" text-anchor="middle" fill="#EDF1FA" font-family="Sora, sans-serif" font-weight="700" font-size="56">68%</text>
+      <text x="124" y="144" text-anchor="middle" fill="#8B96B0" font-family="Manrope, sans-serif" font-size="14">battery</text>
+      <g transform="translate(112, 160)"><path d="M13 2 L5 14 L11 14 L10 22 L19 9 L13 9 Z" stroke="#38C8F0" stroke-width="1.8" stroke-linejoin="round" fill="none"></path></g>
+    </svg>
+    <div style="display: flex; flex-direction: column; align-items: center; gap: 2px;">
+      <div style="font-family: 'Sora', 'Segoe UI', system-ui, sans-serif; font-weight: 700; font-size: 36px; letter-spacing: -0.02em; color: #F5B942; font-variant-numeric: tabular-nums;">₱611.10</div>
+      <div style="font-size: 13px; color: #8B96B0;">charged so far</div>
+    </div>
+  </div>
+  <div style="display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 10px;">
+    <div style="background: #121A2C; border: 1px solid #24304A; border-radius: 16px; padding: 12px 8px; display: flex; flex-direction: column; align-items: center; gap: 2px;">
+      <div style="font-family: 'JetBrains Mono', Consolas, monospace; font-weight: 500; font-size: 19px; color: #EDF1FA; font-variant-numeric: tabular-nums;">47</div>
+      <div style="font-size: 11.5px; color: #8B96B0;">kW now</div>
+    </div>
+    <div style="background: #121A2C; border: 1px solid #24304A; border-radius: 16px; padding: 12px 8px; display: flex; flex-direction: column; align-items: center; gap: 2px;">
+      <div style="font-family: 'JetBrains Mono', Consolas, monospace; font-weight: 500; font-size: 19px; color: #EDF1FA; font-variant-numeric: tabular-nums;">12.6</div>
+      <div style="font-size: 11.5px; color: #8B96B0;">kWh delivered</div>
+    </div>
+    <div style="background: #121A2C; border: 1px solid #24304A; border-radius: 16px; padding: 12px 8px; display: flex; flex-direction: column; align-items: center; gap: 2px;">
+      <div style="font-family: 'JetBrains Mono', Consolas, monospace; font-weight: 500; font-size: 19px; color: #EDF1FA; font-variant-numeric: tabular-nums;">24</div>
+      <div style="font-size: 11.5px; color: #8B96B0;">min elapsed</div>
+    </div>
+  </div>
+  <div style="display: flex; flex-direction: column; gap: 8px; padding: 0 4px;">
+    <div style="height: 6px; background: #24304A; border-radius: 999px;">
+      <div style="width: 41%; height: 6px; background: #F5B942; border-radius: 999px;"></div>
+    </div>
+    <div style="font-size: 12px; color: #8B96B0; text-align: center;">₱1,500.00 held · the unused amount is released when you stop</div>
+  </div>
+  <div style="flex-grow: 1;"></div>
+  <div style="display: flex; flex-direction: column; gap: 10px;">
+    <div style="height: 56px; border: 1.5px solid #FF7A6E; border-radius: 999px; display: flex; align-items: center; justify-content: center; color: #FF7A6E; font-weight: 700; font-size: 16px;">Stop charging</div>
+    <div style="font-size: 12.5px; color: #8B96B0; text-align: center;">Safe to close this page — charging continues.</div>
+  </div>
+</div>
+</x-dc>
+<script data-dc-script data-props='{"$preview":{"width":390,"height":844}}'>
+class Component extends DCLogic {
+  renderVals() { return {}; }
+}
+</script>
+</body>
+</html>

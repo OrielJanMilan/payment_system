@@ -1,0 +1,70 @@
+<!doctype html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Sora:wght@600;700&family=Manrope:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap">
+  <style>
+    body { margin: 0; background: #0B1120; color: #EDF1FA; font-family: "Manrope", "Segoe UI", system-ui, sans-serif; }
+    a { color: #38C8F0; } a:hover { color: #6FDAF6; }
+  </style>
+</helmet>
+<div style="width: 390px; height: 844px; box-sizing: border-box; display: flex; flex-direction: column; gap: 18px; padding: 64px 24px 40px 24px; background: #0B1120;">
+  <div style="display: flex; flex-direction: column; align-items: center; gap: 14px;">
+    <div style="width: 64px; height: 64px; border-radius: 999px; background: #0F2C3D; display: flex; align-items: center; justify-content: center;">
+      <svg width="30" height="30" viewBox="0 0 24 24" fill="none"><path d="M5 12.5 L10 17.5 L19 7" stroke="#38C8F0" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" fill="none"></path></svg>
+    </div>
+    <div style="font-family: 'Sora', 'Segoe UI', system-ui, sans-serif; font-weight: 700; font-size: 24px;">Charging complete</div>
+    <div style="display: flex; flex-direction: column; align-items: center; gap: 4px;">
+      <div style="font-family: 'Sora', 'Segoe UI', system-ui, sans-serif; font-weight: 700; font-size: 44px; letter-spacing: -0.02em; color: #F5B942; font-variant-numeric: tabular-nums;">₱892.40</div>
+      <div style="font-size: 13.5px; color: #8B96B0;">paid via Maya Wallet · Aug 19, 2026 · 2:47 PM</div>
+    </div>
+  </div>
+  <div style="background: #121A2C; border: 1px solid #24304A; border-radius: 20px; padding: 18px 20px; display: flex; flex-direction: column; gap: 12px;">
+    <div style="display: flex; flex-direction: row; justify-content: space-between;">
+      <div style="font-size: 14px; color: #8B96B0;">Energy delivered</div>
+      <div style="font-family: 'JetBrains Mono', Consolas, monospace; font-size: 14px; color: #EDF1FA; font-variant-numeric: tabular-nums;">18.4 kWh</div>
+    </div>
+    <div style="display: flex; flex-direction: row; justify-content: space-between;">
+      <div style="font-size: 14px; color: #8B96B0;">Duration</div>
+      <div style="font-family: 'JetBrains Mono', Consolas, monospace; font-size: 14px; color: #EDF1FA; font-variant-numeric: tabular-nums;">38 min</div>
+    </div>
+    <div style="display: flex; flex-direction: row; justify-content: space-between;">
+      <div style="font-size: 14px; color: #8B96B0;">Rate</div>
+      <div style="font-family: 'JetBrains Mono', Consolas, monospace; font-size: 14px; color: #EDF1FA; font-variant-numeric: tabular-nums;">₱48.50 / kWh</div>
+    </div>
+    <div style="height: 1px; background: #24304A;"></div>
+    <div style="display: flex; flex-direction: row; justify-content: space-between;">
+      <div style="font-size: 14px; color: #8B96B0;">Hold placed</div>
+      <div style="font-family: 'JetBrains Mono', Consolas, monospace; font-size: 14px; color: #EDF1FA; font-variant-numeric: tabular-nums;">₱1,500.00</div>
+    </div>
+    <div style="display: flex; flex-direction: row; justify-content: space-between;">
+      <div style="font-size: 14px; color: #38C8F0;">Hold released</div>
+      <div style="font-family: 'JetBrains Mono', Consolas, monospace; font-size: 14px; color: #38C8F0; font-variant-numeric: tabular-nums;">₱607.60</div>
+    </div>
+  </div>
+  <div style="background: #121A2C; border: 1px dashed #24304A; border-radius: 20px; padding: 16px 20px; display: flex; flex-direction: row; align-items: center; justify-content: space-between; gap: 12px;">
+    <div style="display: flex; flex-direction: column; gap: 2px;">
+      <div style="font-size: 12.5px; color: #8B96B0;">Official receipt</div>
+      <div style="font-family: 'JetBrains Mono', Consolas, monospace; font-size: 14px; color: #EDF1FA;">OR-2026-081942</div>
+    </div>
+    <div style="font-size: 12.5px; color: #8B96B0; text-align: right;">Sent to<br>+63 917 ··· 4482</div>
+  </div>
+  <div style="flex-grow: 1;"></div>
+  <div style="display: flex; flex-direction: column; gap: 10px;">
+    <div style="height: 56px; background: #121A2C; border: 1px solid #24304A; border-radius: 999px; display: flex; align-items: center; justify-content: center; color: #EDF1FA; font-weight: 600; font-size: 15px;">Download receipt</div>
+    <div style="height: 56px; background: #38C8F0; border-radius: 999px; display: flex; align-items: center; justify-content: center; color: #06121C; font-weight: 700; font-size: 16px;">Done</div>
+  </div>
+</div>
+</x-dc>
+<script data-dc-script data-props='{"$preview":{"width":390,"height":844}}'>
+class Component extends DCLogic {
+  renderVals() { return {}; }
+}
+</script>
+</body>
+</html>

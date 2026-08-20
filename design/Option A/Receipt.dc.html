@@ -1,0 +1,70 @@
+<!doctype html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Archivo:wght@600;700&family=IBM+Plex+Mono:wght@400;500&family=IBM+Plex+Sans:wght@400;500;600&display=swap">
+  <style>
+    body { margin: 0; background: #F6F8F7; color: #16211D; font-family: "IBM Plex Sans", "Segoe UI", system-ui, sans-serif; }
+    a { color: #0B8A6B; } a:hover { color: #086A53; }
+  </style>
+</helmet>
+<div style="width: 390px; height: 844px; box-sizing: border-box; display: flex; flex-direction: column; gap: 18px; padding: 64px 24px 40px 24px; background: #F6F8F7;">
+  <div style="display: flex; flex-direction: column; align-items: center; gap: 14px;">
+    <div style="width: 64px; height: 64px; border-radius: 999px; background: #DDF0EA; display: flex; align-items: center; justify-content: center;">
+      <svg width="30" height="30" viewBox="0 0 24 24" fill="none"><path d="M5 12.5 L10 17.5 L19 7" stroke="#0B8A6B" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" fill="none"></path></svg>
+    </div>
+    <div style="font-family: 'Archivo', 'Segoe UI', system-ui, sans-serif; font-weight: 700; font-size: 24px;">Charging complete</div>
+    <div style="display: flex; flex-direction: column; align-items: center; gap: 4px;">
+      <div style="font-family: 'IBM Plex Mono', Consolas, monospace; font-weight: 500; font-size: 40px; color: #B26B3B; font-variant-numeric: tabular-nums;">₱892.40</div>
+      <div style="font-size: 13.5px; color: #5A6B64;">paid via Maya Wallet · Aug 19, 2026 · 2:47 PM</div>
+    </div>
+  </div>
+  <div style="background: #FFFFFF; border: 1px solid #D9E2DD; border-radius: 14px; padding: 18px; display: flex; flex-direction: column; gap: 12px;">
+    <div style="display: flex; flex-direction: row; justify-content: space-between;">
+      <div style="font-size: 14px; color: #5A6B64;">Energy delivered</div>
+      <div style="font-family: 'IBM Plex Mono', Consolas, monospace; font-size: 14px; font-variant-numeric: tabular-nums;">18.4 kWh</div>
+    </div>
+    <div style="display: flex; flex-direction: row; justify-content: space-between;">
+      <div style="font-size: 14px; color: #5A6B64;">Duration</div>
+      <div style="font-family: 'IBM Plex Mono', Consolas, monospace; font-size: 14px; font-variant-numeric: tabular-nums;">38 min</div>
+    </div>
+    <div style="display: flex; flex-direction: row; justify-content: space-between;">
+      <div style="font-size: 14px; color: #5A6B64;">Rate</div>
+      <div style="font-family: 'IBM Plex Mono', Consolas, monospace; font-size: 14px; font-variant-numeric: tabular-nums;">₱48.50 / kWh</div>
+    </div>
+    <div style="height: 1px; background: #D9E2DD;"></div>
+    <div style="display: flex; flex-direction: row; justify-content: space-between;">
+      <div style="font-size: 14px; color: #5A6B64;">Hold placed</div>
+      <div style="font-family: 'IBM Plex Mono', Consolas, monospace; font-size: 14px; font-variant-numeric: tabular-nums;">₱1,500.00</div>
+    </div>
+    <div style="display: flex; flex-direction: row; justify-content: space-between;">
+      <div style="font-size: 14px; color: #086A53;">Hold released</div>
+      <div style="font-family: 'IBM Plex Mono', Consolas, monospace; font-size: 14px; color: #086A53; font-variant-numeric: tabular-nums;">₱607.60</div>
+    </div>
+  </div>
+  <div style="background: #FFFFFF; border: 1px dashed #D9E2DD; border-radius: 14px; padding: 16px 18px; display: flex; flex-direction: row; align-items: center; justify-content: space-between; gap: 12px;">
+    <div style="display: flex; flex-direction: column; gap: 2px;">
+      <div style="font-size: 12.5px; color: #5A6B64;">Official receipt</div>
+      <div style="font-family: 'IBM Plex Mono', Consolas, monospace; font-size: 14px;">OR-2026-081942</div>
+    </div>
+    <div style="font-size: 12.5px; color: #5A6B64; text-align: right;">Sent to<br>+63 917 ··· 4482</div>
+  </div>
+  <div style="flex-grow: 1;"></div>
+  <div style="display: flex; flex-direction: column; gap: 10px;">
+    <div style="height: 52px; background: #FFFFFF; border: 1px solid #D9E2DD; border-radius: 10px; display: flex; align-items: center; justify-content: center; color: #16211D; font-weight: 600; font-size: 15px;">Download receipt</div>
+    <div style="height: 52px; background: #0B8A6B; border-radius: 10px; display: flex; align-items: center; justify-content: center; color: #FFFFFF; font-weight: 600; font-size: 16px;">Done</div>
+  </div>
+</div>
+</x-dc>
+<script data-dc-script data-props='{"$preview":{"width":390,"height":844}}'>
+class Component extends DCLogic {
+  renderVals() { return {}; }
+}
+</script>
+</body>
+</html>

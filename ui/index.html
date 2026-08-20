@@ -1,0 +1,304 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <meta name="theme-color" content="#F6F8F7">
+  <title>Option C — EV Charging</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:wght@600;700&family=Instrument+Sans:wght@400;500;600;700&family=Space+Mono:wght@400;700&display=swap">
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+
+<div class="app" id="app">
+
+  <!-- ============ S1 · Scan / Landing ============ -->
+  <section class="screen" id="screen-scan" data-screen="scan">
+    <header class="scan-header">
+      <div class="wordmark">
+        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M13 2 L5 14 L11 14 L10 22 L19 9 L13 9 Z" stroke="var(--accent)" stroke-width="1.8" stroke-linejoin="round"/></svg>
+        <span>Option C</span>
+      </div>
+      <button class="icon-btn" id="btn-history" aria-label="Your sessions">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" aria-hidden="true"><circle cx="12" cy="12" r="9" stroke="currentColor" stroke-width="1.8"/><path d="M12 7v5l3.5 2" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></svg>
+      </button>
+    </header>
+
+    <div class="scan-columns">
+      <div class="scan-col">
+        <!-- C1 Quick Start card (returning drivers) -->
+        <article class="card quickstart" id="quickstart-card">
+          <div class="eyebrow eyebrow--green">Charge again</div>
+          <div class="stack-3">
+            <div class="quickstart-title">Ayala Malls Manila Bay · CHG-0042</div>
+            <div class="sub">Maya Wallet · CCS2 · ₱48.50 / kWh</div>
+          </div>
+          <button class="btn btn-primary" id="btn-quickstart">Quick start — hold ₱1,500.00</button>
+          <div class="caption">One tap: your last charger, rate, and payment method.</div>
+        </article>
+
+        <div class="divider-row" aria-hidden="true">
+          <div class="rule"></div>
+          <div class="divider-label">Or scan a new charger</div>
+          <div class="rule"></div>
+        </div>
+      </div>
+
+      <div class="scan-col">
+        <!-- Viewfinder -->
+        <div class="viewfinder" role="img" aria-label="Camera viewfinder for scanning the charger QR code">
+          <svg class="vf-brackets" viewBox="0 0 342 250" fill="none" preserveAspectRatio="none" aria-hidden="true">
+            <path d="M36 68 L36 48 Q36 36 48 36 L68 36" stroke="var(--accent)" stroke-width="3" stroke-linecap="round"/>
+            <path d="M274 36 L294 36 Q306 36 306 48 L306 68" stroke="var(--accent)" stroke-width="3" stroke-linecap="round"/>
+            <path d="M306 182 L306 202 Q306 214 294 214 L274 214" stroke="var(--accent)" stroke-width="3" stroke-linecap="round"/>
+            <path d="M68 214 L48 214 Q36 214 36 202 L36 182" stroke="var(--accent)" stroke-width="3" stroke-linecap="round"/>
+          </svg>
+          <div class="vf-scanline" aria-hidden="true"></div>
+          <svg width="38" height="38" viewBox="0 0 24 24" fill="none" aria-hidden="true"><rect x="3" y="6" width="18" height="14" rx="2.5" stroke="var(--ink-faint)" stroke-width="1.6"/><path d="M8 6 L9.5 3.5 L14.5 3.5 L16 6" stroke="var(--ink-faint)" stroke-width="1.6" stroke-linejoin="round"/><circle cx="12" cy="13" r="4" stroke="var(--ink-faint)" stroke-width="1.6"/></svg>
+          <div class="vf-hint">Aim at the QR code near the connector</div>
+        </div>
+
+        <!-- Manual code entry -->
+        <form class="code-row" id="code-form" novalidate>
+          <input class="code-input" id="code-input" type="text" inputmode="text" autocomplete="off"
+                 autocapitalize="characters" spellcheck="false" placeholder="CHG-____"
+                 aria-label="Charger code" maxlength="8">
+          <button class="btn btn-dark btn-go" type="submit" id="btn-go">Go</button>
+        </form>
+        <div class="field-error" id="code-error" role="alert" hidden></div>
+      </div>
+    </div>
+
+    <div class="spacer"></div>
+    <footer class="trust-footer">
+      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" aria-hidden="true"><rect x="5" y="10" width="14" height="10" rx="2" stroke="currentColor" stroke-width="1.8"/><path d="M8 10 V7 a4 4 0 0 1 8 0 v3" stroke="currentColor" stroke-width="1.8"/></svg>
+      <span>Pay only for what you charge · Secured by Maya</span>
+    </footer>
+  </section>
+
+  <!-- ============ C2 · Start (confirm + pay) ============ -->
+  <section class="screen" id="screen-start" data-screen="start" hidden>
+    <header class="page-header">
+      <button class="icon-btn icon-btn--boxed" id="btn-start-back" aria-label="Back">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M15 5 L8 12 L15 19" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+      </button>
+      <div class="stack-1">
+        <div class="page-title" id="start-charger-id">CHG-0042 · Bay 14</div>
+        <div class="sub">Ayala Malls Manila Bay</div>
+      </div>
+    </header>
+
+    <div class="start-columns">
+      <div class="start-col">
+        <div class="rate-block">
+          <div class="rate-figure"><span class="display-num">₱48.50</span><span class="rate-unit">/ kWh</span></div>
+          <div class="sub">CCS2 · DC fast up to 60 kW · <span class="ok">available now</span></div>
+        </div>
+
+        <div class="stack-10">
+          <div class="eyebrow">Pay with</div>
+          <div class="method-chips" role="radiogroup" aria-label="Payment method">
+            <button class="chip is-selected" role="radio" aria-checked="true" data-method="Maya Wallet">
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M5 12.5 L10 17.5 L19 7" stroke="var(--accent)" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"/></svg>
+              Maya Wallet
+            </button>
+            <button class="chip" role="radio" aria-checked="false" data-method="Card">Card</button>
+            <button class="chip" role="radio" aria-checked="false" data-method="QR Ph">QR Ph</button>
+          </div>
+        </div>
+      </div>
+
+      <div class="start-col">
+        <div class="card card--mint stack-4">
+          <div class="hold-title">₱1,500.00 hold — pay only for the energy you use</div>
+          <div class="hold-body">The unused part is released as soon as you unplug. Idle fee ₱2.00/min applies 10 minutes after charging completes.</div>
+        </div>
+
+        <div class="cta-block">
+          <button class="btn btn-primary btn-lg" id="btn-hold-start">Hold &amp; start charging</button>
+          <div class="caption center">Two taps from scan to charging · no account needed</div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============ S4 · Charging Live ============ -->
+  <section class="screen" id="screen-live" data-screen="live" hidden>
+    <header class="live-header">
+      <div class="stack-2">
+        <div class="page-title-lg">Charging</div>
+        <div class="sub">Ayala Malls Manila Bay · Bay 14</div>
+      </div>
+      <div class="id-pill">CHG-0042</div>
+    </header>
+
+    <div class="live-columns">
+      <div class="live-col live-col--ring">
+        <div class="ring-wrap">
+          <svg width="240" height="240" viewBox="0 0 248 248" fill="none" role="img" aria-label="Battery state of charge">
+            <circle cx="124" cy="124" r="104" stroke="var(--line)" stroke-width="14"/>
+            <circle id="ring-progress" cx="124" cy="124" r="104" stroke="var(--accent)" stroke-width="14"
+                    stroke-linecap="round" stroke-dasharray="0 653.5" transform="rotate(-90 124 124)"/>
+            <text id="ring-pct" x="124" y="116" text-anchor="middle" class="ring-num">68%</text>
+            <text x="124" y="144" text-anchor="middle" class="ring-label">battery</text>
+            <g transform="translate(112, 160)"><path d="M13 2 L5 14 L11 14 L10 22 L19 9 L13 9 Z" stroke="var(--accent)" stroke-width="1.8" stroke-linejoin="round" fill="none"/></g>
+          </svg>
+          <div class="engage-pill" id="engage-pill">+76 km added (est.) · 80% ≈ 3:05 PM</div>
+        </div>
+      </div>
+
+      <div class="live-col">
+        <div class="cost-block">
+          <div class="cost-figure display-num" id="live-cost">₱611.10</div>
+          <div class="sub" id="live-stats">charged so far · 12.6 kWh · 47 kW · 24 min</div>
+        </div>
+
+        <div class="hold-bar-block">
+          <div class="hold-bar" role="progressbar" aria-label="Hold used" aria-valuemin="0" aria-valuemax="100" aria-valuenow="41" id="hold-bar">
+            <div class="hold-bar-fill" id="hold-bar-fill" style="width:41%"></div>
+          </div>
+          <div class="caption center" id="hold-caption">₱1,500.00 held · the unused amount is released when you stop</div>
+        </div>
+
+        <div class="cta-block">
+          <button class="btn btn-danger-outline btn-lg" id="btn-stop">Stop charging</button>
+          <div class="caption center">Safe to close this page — charging continues.</div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============ S5 · Receipt ============ -->
+  <section class="screen" id="screen-receipt" data-screen="receipt" hidden>
+    <div class="receipt-head">
+      <div class="success-badge">
+        <svg width="30" height="30" viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M5 12.5 L10 17.5 L19 7" stroke="var(--accent)" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+      </div>
+      <h1 class="receipt-title">Charging complete</h1>
+      <div class="stack-4 center-col">
+        <div class="receipt-amount display-num" id="rc-amount">₱892.40</div>
+        <div class="sub" id="rc-meta">paid via Maya Wallet · Aug 19, 2026 · 3:08 PM</div>
+      </div>
+    </div>
+
+    <div class="receipt-columns">
+      <div class="receipt-col">
+        <div class="card detail-card">
+          <div class="detail-row"><span class="detail-label">Energy delivered</span><span class="mono" id="rc-energy">18.4 kWh · 38 min</span></div>
+          <div class="detail-row"><span class="detail-label">Rate</span><span class="mono">₱48.50 / kWh</span></div>
+          <div class="rule"></div>
+          <div class="detail-row"><span class="detail-label">Hold placed</span><span class="mono">₱1,500.00</span></div>
+          <div class="detail-row detail-row--green"><span class="detail-label">Hold released</span><span class="mono" id="rc-released">₱607.60</span></div>
+        </div>
+      </div>
+      <div class="receipt-col">
+        <div class="card card--mint eco-line">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M12 21 C7 17 4 13.5 4 9.8 A5 5 0 0 1 12 6 A5 5 0 0 1 20 9.8 C20 13.5 17 17 12 21 Z" stroke="var(--primary)" stroke-width="1.7" stroke-linejoin="round"/></svg>
+          <div id="rc-eco">About 110 km of range added · ~13 kg CO₂ avoided vs gasoline (est.)</div>
+        </div>
+
+        <div class="or-row">
+          <div class="stack-1">
+            <div class="caption">Official receipt · sent to +63 917 ··· 4482</div>
+            <div class="mono or-num">OR-2026-081942</div>
+          </div>
+          <a href="#" class="text-link" id="btn-download">Download PDF</a>
+        </div>
+      </div>
+    </div>
+
+    <div class="spacer"></div>
+    <button class="btn btn-primary btn-lg" id="btn-done">Done</button>
+  </section>
+
+  <!-- ============ S6 · History ============ -->
+  <section class="screen" id="screen-history" data-screen="history" hidden>
+    <header class="page-header page-header--plain">
+      <button class="icon-btn icon-btn--boxed" id="btn-history-back" aria-label="Back">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M15 5 L8 12 L15 19" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+      </button>
+      <div class="stack-1">
+        <div class="page-title-lg">Your sessions</div>
+        <div class="sub">+63 917 ··· 4482</div>
+      </div>
+    </header>
+
+    <div class="month-summary">
+      <div class="eyebrow eyebrow--green">August 2026</div>
+      <div class="month-row">
+        <div class="month-total display-num">₱3,210.70</div>
+        <div class="sub">4 sessions · 66.2 kWh</div>
+      </div>
+      <div class="insight-line">≈ 397 km driven on charge this month (est.)</div>
+      <div class="rule"></div>
+    </div>
+
+    <div class="session-list" id="session-list">
+      <button class="card session-row" data-session="0">
+        <div class="session-info">
+          <div class="session-site">Ayala Malls Manila Bay</div>
+          <div class="caption">Aug 19 · 18.4 kWh · 38 min</div>
+        </div>
+        <div class="mono session-amt">₱892.40</div>
+        <svg class="chev" width="16" height="16" viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M9 5 L16 12 L9 19" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+      </button>
+      <button class="card session-row" data-session="1">
+        <div class="session-info">
+          <div class="session-site">SM Mall of Asia</div>
+          <div class="caption">Aug 12 · 21.0 kWh · 44 min</div>
+        </div>
+        <div class="mono session-amt">₱1,018.50</div>
+        <svg class="chev" width="16" height="16" viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M9 5 L16 12 L9 19" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+      </button>
+      <button class="card session-row" data-session="2">
+        <div class="session-info">
+          <div class="session-site">BGC High Street</div>
+          <div class="caption">Aug 7 · 14.6 kWh · 31 min</div>
+        </div>
+        <div class="mono session-amt">₱708.10</div>
+        <svg class="chev" width="16" height="16" viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M9 5 L16 12 L9 19" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+      </button>
+      <button class="card session-row" data-session="3">
+        <div class="session-info">
+          <div class="session-site">NLEX Marilao Northbound</div>
+          <div class="caption">Aug 2 · 12.2 kWh · 26 min</div>
+        </div>
+        <div class="mono session-amt">₱591.70</div>
+        <svg class="chev" width="16" height="16" viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M9 5 L16 12 L9 19" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+      </button>
+    </div>
+
+    <div class="spacer"></div>
+    <footer class="trust-footer">
+      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M13 2 L5 14 L11 14 L10 22 L19 9 L13 9 Z" stroke="var(--accent)" stroke-width="1.8" stroke-linejoin="round"/></svg>
+      <span>Receipts are also sent by SMS after every session</span>
+    </footer>
+  </section>
+</div>
+
+<!-- Stop-charging confirmation sheet -->
+<div class="sheet-backdrop" id="sheet-backdrop" hidden>
+  <div class="sheet" role="alertdialog" aria-modal="true" aria-labelledby="sheet-title">
+    <div class="sheet-handle" aria-hidden="true"></div>
+    <div class="sheet-title" id="sheet-title">Stop charging now?</div>
+    <div class="sheet-body">We'll take the final meter reading, charge you for exactly what was delivered, and release the rest of the hold.</div>
+    <div class="sheet-actions">
+      <button class="btn btn-danger btn-lg" id="btn-stop-confirm">Stop &amp; pay</button>
+      <button class="btn btn-ghost btn-lg" id="btn-stop-cancel">Keep charging</button>
+    </div>
+  </div>
+</div>
+
+<!-- Transient authorizing overlay -->
+<div class="auth-overlay" id="auth-overlay" hidden>
+  <div class="auth-card">
+    <div class="auth-spinner" aria-hidden="true"></div>
+    <div class="auth-text" id="auth-text">Authorizing ₱1,500.00 hold…</div>
+  </div>
+</div>
+
+<script src="app.js"></script>
+</body>
+</html>

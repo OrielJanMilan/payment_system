@@ -1,0 +1,70 @@
+<!doctype html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Archivo:wght@600;700&family=IBM+Plex+Mono:wght@400;500&family=IBM+Plex+Sans:wght@400;500;600&display=swap">
+  <style>
+    body { margin: 0; background: #0F1513; color: #E5EEE9; font-family: "IBM Plex Sans", "Segoe UI", system-ui, sans-serif; }
+    a { color: #2FBF95; } a:hover { color: #5BD4B0; }
+  </style>
+</helmet>
+<div style="width: 390px; height: 844px; box-sizing: border-box; display: flex; flex-direction: column; gap: 18px; padding: 56px 24px 40px 24px; background: #0F1513;">
+  <div style="display: flex; flex-direction: row; align-items: center; justify-content: space-between;">
+    <div style="display: flex; flex-direction: column; gap: 2px;">
+      <div style="font-family: 'Archivo', 'Segoe UI', system-ui, sans-serif; font-weight: 700; font-size: 22px; color: #E5EEE9;">Charging</div>
+      <div style="font-size: 13px; color: #93A69D;">Ayala Malls Manila Bay · Bay 14</div>
+    </div>
+    <div style="font-family: 'IBM Plex Mono', Consolas, monospace; font-size: 11px; letter-spacing: 0.06em; color: #93A69D; border: 1px solid #28342E; padding: 5px 10px; border-radius: 999px;">CHG-0042</div>
+  </div>
+  <div style="display: flex; flex-direction: column; align-items: center; gap: 4px; padding: 8px 0 0 0;">
+    <svg width="248" height="248" viewBox="0 0 248 248" fill="none">
+      <circle cx="124" cy="124" r="104" stroke="#28342E" stroke-width="12" fill="none"></circle>
+      <circle cx="124" cy="124" r="104" stroke="#2FBF95" stroke-width="12" fill="none" stroke-linecap="round" stroke-dasharray="444.4 653.5" transform="rotate(-90 124 124)"></circle>
+      <text x="124" y="118" text-anchor="middle" fill="#E5EEE9" font-family="Archivo, sans-serif" font-weight="700" font-size="52">68%</text>
+      <text x="124" y="146" text-anchor="middle" fill="#93A69D" font-family="'IBM Plex Sans', sans-serif" font-size="14">battery</text>
+      <g transform="translate(112, 162)"><path d="M13 2 L5 14 L11 14 L10 22 L19 9 L13 9 Z" stroke="#2FBF95" stroke-width="1.8" stroke-linejoin="round" fill="none"></path></g>
+    </svg>
+  </div>
+  <div style="display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 10px;">
+    <div style="background: #161E1B; border: 1px solid #28342E; border-radius: 12px; padding: 12px 8px; display: flex; flex-direction: column; align-items: center; gap: 2px;">
+      <div style="font-family: 'IBM Plex Mono', Consolas, monospace; font-weight: 500; font-size: 19px; color: #E5EEE9; font-variant-numeric: tabular-nums;">47</div>
+      <div style="font-size: 11.5px; color: #93A69D;">kW now</div>
+    </div>
+    <div style="background: #161E1B; border: 1px solid #28342E; border-radius: 12px; padding: 12px 8px; display: flex; flex-direction: column; align-items: center; gap: 2px;">
+      <div style="font-family: 'IBM Plex Mono', Consolas, monospace; font-weight: 500; font-size: 19px; color: #E5EEE9; font-variant-numeric: tabular-nums;">12.6</div>
+      <div style="font-size: 11.5px; color: #93A69D;">kWh delivered</div>
+    </div>
+    <div style="background: #161E1B; border: 1px solid #28342E; border-radius: 12px; padding: 12px 8px; display: flex; flex-direction: column; align-items: center; gap: 2px;">
+      <div style="font-family: 'IBM Plex Mono', Consolas, monospace; font-weight: 500; font-size: 19px; color: #E5EEE9; font-variant-numeric: tabular-nums;">24</div>
+      <div style="font-size: 11.5px; color: #93A69D;">min elapsed</div>
+    </div>
+  </div>
+  <div style="background: #161E1B; border: 1px solid #28342E; border-radius: 14px; padding: 18px; display: flex; flex-direction: column; gap: 12px;">
+    <div style="display: flex; flex-direction: row; align-items: baseline; justify-content: space-between;">
+      <div style="font-size: 14px; color: #93A69D;">Charged so far</div>
+      <div style="font-family: 'IBM Plex Mono', Consolas, monospace; font-weight: 500; font-size: 26px; color: #D68A55; font-variant-numeric: tabular-nums;">₱611.10</div>
+    </div>
+    <div style="height: 6px; background: #28342E; border-radius: 999px;">
+      <div style="width: 41%; height: 6px; background: #D68A55; border-radius: 999px;"></div>
+    </div>
+    <div style="font-size: 12px; color: #93A69D;">₱1,500.00 held · the unused amount is released when you stop</div>
+  </div>
+  <div style="flex-grow: 1;"></div>
+  <div style="display: flex; flex-direction: column; gap: 10px;">
+    <div style="height: 52px; border: 1.5px solid #F08A80; border-radius: 10px; display: flex; align-items: center; justify-content: center; color: #F08A80; font-weight: 600; font-size: 16px;">Stop charging</div>
+    <div style="font-size: 12.5px; color: #93A69D; text-align: center;">Safe to close this page — charging continues.</div>
+  </div>
+</div>
+</x-dc>
+<script data-dc-script data-props='{"$preview":{"width":390,"height":844}}'>
+class Component extends DCLogic {
+  renderVals() { return {}; }
+}
+</script>
+</body>
+</html>

@@ -1,0 +1,72 @@
+<!doctype html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Archivo:wght@600;700&family=IBM+Plex+Mono:wght@400;500&family=IBM+Plex+Sans:wght@400;500;600&display=swap">
+  <style>
+    body { margin: 0; background: #F6F8F7; color: #16211D; font-family: "IBM Plex Sans", "Segoe UI", system-ui, sans-serif; }
+    a { color: #0B8A6B; } a:hover { color: #086A53; }
+  </style>
+</helmet>
+<div style="width: 390px; height: 844px; box-sizing: border-box; display: flex; flex-direction: column; gap: 16px; padding: 56px 24px 40px 24px; background: #F6F8F7;">
+  <div style="display: flex; flex-direction: row; align-items: center; gap: 10px;">
+    <div style="width: 44px; height: 44px; border-radius: 10px; background: #FFFFFF; border: 1px solid #D9E2DD; display: flex; align-items: center; justify-content: center;">
+      <svg width="18" height="18" viewBox="0 0 24 24" fill="none"><path d="M15 5 L8 12 L15 19" stroke="#16211D" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" fill="none"></path></svg>
+    </div>
+    <div style="font-family: 'Archivo', 'Segoe UI', system-ui, sans-serif; font-weight: 600; font-size: 18px;">Payment</div>
+  </div>
+  <div style="background: #FFFFFF; border: 1px solid #D9E2DD; border-radius: 14px; padding: 18px; display: flex; flex-direction: column; gap: 6px;">
+    <div style="display: flex; flex-direction: row; align-items: center; justify-content: space-between;">
+      <div style="font-size: 14.5px; color: #5A6B64;">Hold amount</div>
+      <div style="font-family: 'IBM Plex Mono', Consolas, monospace; font-weight: 500; font-size: 20px; font-variant-numeric: tabular-nums;">₱1,500.00</div>
+    </div>
+    <div style="font-size: 12.5px; color: #5A6B64;">Covers up to ~30 kWh at this charger · unused amount released</div>
+  </div>
+  <div style="font-family: 'IBM Plex Mono', Consolas, monospace; font-size: 10.5px; letter-spacing: 0.1em; color: #5A6B64; margin-top: 4px;">PAY WITH</div>
+  <div style="display: flex; flex-direction: column; gap: 10px;">
+    <div style="background: #FFFFFF; border: 2px solid #0B8A6B; border-radius: 12px; padding: 14px 16px; display: flex; flex-direction: row; align-items: center; gap: 14px;">
+      <div style="width: 20px; height: 20px; border-radius: 999px; border: 2px solid #0B8A6B; display: flex; align-items: center; justify-content: center; flex-shrink: 0;"><div style="width: 10px; height: 10px; border-radius: 999px; background: #0B8A6B;"></div></div>
+      <svg width="24" height="24" viewBox="0 0 24 24" fill="none" style="flex-shrink: 0;"><rect x="3" y="6" width="18" height="13" rx="2.5" stroke="#16211D" stroke-width="1.6" fill="none"></rect><path d="M16 12.5 h5" stroke="#16211D" stroke-width="1.6" stroke-linecap="round"></path><circle cx="16.5" cy="12.5" r="1.2" fill="#16211D"></circle></svg>
+      <div style="display: flex; flex-direction: column; gap: 1px; flex-grow: 1;">
+        <div style="font-weight: 600; font-size: 15px;">Maya Wallet</div>
+        <div style="font-size: 12.5px; color: #5A6B64;">Balance or linked cards</div>
+      </div>
+      <div style="font-family: 'IBM Plex Mono', Consolas, monospace; font-size: 10px; letter-spacing: 0.06em; color: #086A53; background: #DDF0EA; padding: 3px 8px; border-radius: 999px;">FASTEST</div>
+    </div>
+    <div style="background: #FFFFFF; border: 1px solid #D9E2DD; border-radius: 12px; padding: 14px 16px; display: flex; flex-direction: row; align-items: center; gap: 14px;">
+      <div style="width: 20px; height: 20px; border-radius: 999px; border: 2px solid #D9E2DD; flex-shrink: 0;"></div>
+      <svg width="24" height="24" viewBox="0 0 24 24" fill="none" style="flex-shrink: 0;"><rect x="3" y="5.5" width="18" height="13" rx="2.5" stroke="#16211D" stroke-width="1.6" fill="none"></rect><line x1="3" y1="10" x2="21" y2="10" stroke="#16211D" stroke-width="1.6"></line><line x1="6.5" y1="14.5" x2="11" y2="14.5" stroke="#16211D" stroke-width="1.6" stroke-linecap="round"></line></svg>
+      <div style="display: flex; flex-direction: column; gap: 1px; flex-grow: 1;">
+        <div style="font-weight: 600; font-size: 15px;">Credit / debit card</div>
+        <div style="font-size: 12.5px; color: #5A6B64;">Visa · Mastercard · JCB</div>
+      </div>
+    </div>
+    <div style="background: #FFFFFF; border: 1px solid #D9E2DD; border-radius: 12px; padding: 14px 16px; display: flex; flex-direction: row; align-items: center; gap: 14px;">
+      <div style="width: 20px; height: 20px; border-radius: 999px; border: 2px solid #D9E2DD; flex-shrink: 0;"></div>
+      <svg width="24" height="24" viewBox="0 0 24 24" fill="none" style="flex-shrink: 0;"><rect x="4" y="4" width="7" height="7" rx="1.5" stroke="#16211D" stroke-width="1.6" fill="none"></rect><rect x="13" y="4" width="7" height="7" rx="1.5" stroke="#16211D" stroke-width="1.6" fill="none"></rect><rect x="4" y="13" width="7" height="7" rx="1.5" stroke="#16211D" stroke-width="1.6" fill="none"></rect><path d="M13 13 h3 v3 h-3 Z M17 17 h3 v3 h-3 Z" stroke="#16211D" stroke-width="1.6" fill="none"></path></svg>
+      <div style="display: flex; flex-direction: column; gap: 1px; flex-grow: 1;">
+        <div style="font-weight: 600; font-size: 15px;">QR Ph</div>
+        <div style="font-size: 12.5px; color: #5A6B64;">Scan with any bank or e-wallet app</div>
+      </div>
+    </div>
+  </div>
+  <div style="display: flex; flex-direction: row; align-items: flex-start; gap: 8px; padding: 0 4px;">
+    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" style="flex-shrink: 0; margin-top: 2px;"><rect x="5" y="10" width="14" height="10" rx="2" stroke="#5A6B64" stroke-width="1.8" fill="none"></rect><path d="M8 10 V7 a4 4 0 0 1 8 0 v3" stroke="#5A6B64" stroke-width="1.8" fill="none"></path></svg>
+    <div style="font-size: 12.5px; color: #5A6B64; line-height: 1.5;">You'll be redirected to Maya's secure page to authorize. Card details never touch our servers.</div>
+  </div>
+  <div style="flex-grow: 1;"></div>
+  <div style="height: 52px; background: #0B8A6B; border-radius: 10px; display: flex; align-items: center; justify-content: center; color: #FFFFFF; font-weight: 600; font-size: 16px;">Authorize ₱1,500.00 hold</div>
+</div>
+</x-dc>
+<script data-dc-script data-props='{"$preview":{"width":390,"height":844}}'>
+class Component extends DCLogic {
+  renderVals() { return {}; }
+}
+</script>
+</body>
+</html>

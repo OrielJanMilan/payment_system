@@ -1,0 +1,13 @@
+{
+  "artboards": [
+    { "file": "Main.dc.html",    "x": 0,    "y": 0, "w": 390, "h": 844, "title": "C1 · Scan & Quick start" },
+    { "file": "Start.dc.html",   "x": 470,  "y": 0, "w": 390, "h": 844, "title": "C2 · Start (confirm + pay)" },
+    { "file": "Live.dc.html",    "x": 940,  "y": 0, "w": 390, "h": 844, "title": "C3 · Charging Live" },
+    { "file": "Receipt.dc.html", "x": 1410, "y": 0, "w": 390, "h": 844, "title": "C4 · Receipt" },
+    { "file": "History.dc.html", "x": 1880, "y": 0, "w": 390, "h": 844, "title": "C5 · History" }
+  ],
+  "annotations": [
+    { "id": "flow-note", "x": 0, "y": -170, "w": 480, "text": "Option C — express, engaging, simple. Five screens instead of six: confirm + payment merge into one Start screen (two taps from scan to charging), and returning drivers get a one-tap Quick Start that reuses their last charger and payment method. Engagement is one element per screen: range added + ETA on Live, range + CO₂ avoided on Receipt, km-on-charge on History. Palette matches Option A (cool off-white ground, teal accent, copper money figures) on C's simplified structure; Bricolage Grotesque / Instrument Sans / Space Mono.\nSame amounts as Options A and B: ₱48.50/kWh, 18.4 kWh → ₱892.40 captured, ₱607.60 released." }
+  ],
+  "launch": { "view": "canvas" }
+}

@@ -1,0 +1,14 @@
+{
+  "artboards": [
+    { "file": "Main.dc.html",    "x": 0,    "y": 0, "w": 390, "h": 844, "title": "B1 · Scan" },
+    { "file": "Confirm.dc.html", "x": 470,  "y": 0, "w": 390, "h": 844, "title": "B2 · Charger & Rate" },
+    { "file": "Pay.dc.html",     "x": 940,  "y": 0, "w": 390, "h": 844, "title": "B3 · Payment" },
+    { "file": "Live.dc.html",    "x": 1410, "y": 0, "w": 390, "h": 844, "title": "B4 · Charging Live" },
+    { "file": "Receipt.dc.html", "x": 1880, "y": 0, "w": 390, "h": 844, "title": "B5 · Receipt" },
+    { "file": "History.dc.html", "x": 2350, "y": 0, "w": 390, "h": 844, "title": "B6 · History" }
+  ],
+  "annotations": [
+    { "id": "flow-note", "x": 0, "y": -150, "w": 460, "text": "Option B — night bold: immersive dark, electric cyan + amber money accents, Sora/Manrope/JetBrains Mono, pill controls, oversized numerals. Tradeoff vs Option A: more presence and glanceability at the charger, but heavier visual voice and lower daylight readability.\nSame flow and amounts as Option A for direct comparison: ₱48.50/kWh, 18.4 kWh → ₱892.40 captured, ₱607.60 released." }
+  ],
+  "launch": { "view": "canvas" }
+}
