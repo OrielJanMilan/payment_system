@@ -26,6 +26,7 @@
   var session = null;          // active SessionDto (Live)
   var receiptSession = null;   // SessionDto rendered on Receipt
   var pendingSession = null;   // retryable pending_payment session (failed/expired checkout)
+  var pendingSlugAfterDone = null; // QR slug scanned while an unacknowledged receipt was due
 
   function lastCharge() {
     try { return JSON.parse(localStorage.getItem("lastCharge") || "null"); }
@@ -585,7 +586,8 @@
   /* ---------- S5 · receipt ---------- */
 
   function onSessionEnded(dto) {
-    localStorage.removeItem("activeSessionId");
+    /* activeSessionId is kept until the driver taps Done — so a closed and
+       reopened app still lands on this receipt (ISSUES.md #2). */
     $("btn-stop").disabled = false;
     $("btn-stop").textContent = "Stop charging";
     renderReceipt(dto);
@@ -623,8 +625,23 @@
   }
 
   $("btn-done").addEventListener("click", function () {
+    /* Done acknowledges the receipt — only now is the session pointer cleared
+       (and only if it points at this receipt's session, never a live one). */
+    if (receiptSession && localStorage.getItem("activeSessionId") === receiptSession.id) {
+      localStorage.removeItem("activeSessionId");
+    }
     receiptSession = null;
     session = null;
+    var slug = pendingSlugAfterDone;
+    pendingSlugAfterDone = null;
+    if (slug) {
+      /* The driver scanned a charger while this receipt was due — continue
+         to that charger's Start screen instead of making them re-scan. */
+      api("/chargers/by-slug/" + slug).then(function (r) {
+        if (r.ok) showStart(r.body); else navigate("scan");
+      });
+      return;
+    }
     navigate("scan");
   });
 
@@ -749,6 +766,69 @@
       resumePaymentReturn(paymentReturn);
       return;
     }
+
+    /* The driver's own session state outranks how the app was opened —
+       deep link, bare URL, or code entry all defer to it (ISSUES.md #1–#3). */
+    var activeId = localStorage.getItem("activeSessionId");
+    if (activeId) {
+      api("/sessions/" + activeId).then(function (r) {
+        resumeFromSession(r.ok ? r.body : null, slug, error);
+      });
+      return;
+    }
+    openLanding(slug, error);
+  }
+
+  function resumeFromSession(s, slug, error) {
+    if (s && s.state === "charging") {
+      /* #1: still charging → straight back to Live, even via a fresh QR scan. */
+      session = s;
+      navigate("live");
+      render();
+      return;
+    }
+    if (s && s.state === "pending_start") {
+      waitForChargerStart(s.id);
+      return;
+    }
+    if (s && s.state === "ended") {
+      /* #2: finished while the app was closed → show the receipt until Done.
+         A slug scanned on the way in continues to that charger after Done. */
+      pendingSlugAfterDone = slug || null;
+      renderReceipt(s);
+      navigate("receipt");
+      render();
+      return;
+    }
+    if (s && s.state === "start_failed") {
+      /* Show the hold-released explanation once, then forget the session. */
+      localStorage.removeItem("activeSessionId");
+      returnToStartOf(s.id,
+        "Couldn't start the charger — the hold has been released. Try again.");
+      return;
+    }
+    if (s && s.state === "pending_payment") {
+      /* #3: checkout was abandoned but the reservation is still live —
+         restore it (unless the driver scanned a different charger). */
+      api("/chargers/" + s.chargerCode).then(function (cr) {
+        var sameCharger = !slug || (cr.ok && cr.body.qrSlug === slug);
+        if (cr.ok && sameCharger) {
+          pendingSession = s;
+          showStart(cr.body, null, true);
+          render();
+        } else {
+          localStorage.removeItem("activeSessionId");
+          openLanding(slug, error);
+        }
+      });
+      return;
+    }
+    /* expired / unknown / deleted — nothing to restore */
+    localStorage.removeItem("activeSessionId");
+    openLanding(slug, error);
+  }
+
+  function openLanding(slug, error) {
     if (slug) {
       api("/chargers/by-slug/" + slug).then(function (r) {
         if (r.ok) { showStart(r.body); } else {
@@ -761,23 +841,6 @@
     if (error === "charger-not-found") {
       render();
       showCodeError("Charger not found — check the code.");
-      return;
-    }
-
-    /* Session resume: reopening while a session is live goes straight to S4. */
-    var activeId = localStorage.getItem("activeSessionId");
-    if (activeId) {
-      api("/sessions/" + activeId).then(function (r) {
-        var s = r.ok ? r.body : null;
-        if (s && (s.state === "charging" || s.state === "pending_start")) {
-          session = s;
-          if (s.state === "pending_start") { waitForChargerStart(s.id); }
-          else { navigate("live"); render(); }
-        } else {
-          localStorage.removeItem("activeSessionId");
-          render();
-        }
-      });
       return;
     }
     render();
