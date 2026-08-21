@@ -10,7 +10,7 @@ References: [development.md](development.md) · [BACKEND.md](BACKEND.md) ·
 
 ---
 
-**Overall progress: 27 / 43 — 63% accomplished**
+**Overall progress: 31 / 43 — 72% accomplished**
 
 ## 1. Functional testing (API)
 
@@ -38,10 +38,10 @@ References: [development.md](development.md) · [BACKEND.md](BACKEND.md) ·
 - ✅ Phone-reachable HTTPS via cloudflared tunnel; redirects derived from request host
 - ✅ QR code scan → deep link → app shell on the tunnel origin
 - ✅ First bug-hunt round (Aug 21) — 3 bugs found, fixed, re-verified (camera gating, SSE buffered by tunnel → polling fallback)
-- ❌ Happy path end-to-end on phone — scan → pay → live updates → stop → receipt matches billing math
-- ❌ Failure paths on phone — decline at checkout, refused start, app closed/reopened mid-charge, airplane-mode blip
-- ❌ Edge checks on phone — 90% soft-stop fires, `EVDisconnected` lands on receipt, `IN USE` connector blocked
-- ❌ Cross-device / cross-browser pass (iOS Safari + Android Chrome at minimum)
+- ✅ Happy path end-to-end on phone — scan → pay → live updates → stop → receipt (user-confirmed Aug 21)
+- ✅ Failure paths on phone — decline at checkout, refused start, app closed/reopened mid-charge, connectivity blip (user-confirmed Aug 21)
+- ✅ Edge checks on phone — soft-stop, scenario stops via `/mock-cp/panel`, availability gating (user-confirmed Aug 21)
+- ❌ Cross-device / cross-browser pass (iOS Safari + Android Chrome at minimum — one device confirmed so far)
 
 ## 4. Regression testing
 
@@ -76,7 +76,7 @@ References: [development.md](development.md) · [BACKEND.md](BACKEND.md) ·
 
 - ✅ Screen behavior matches the functional spec (`SCREEN_FUNCTIONALITY.md`) for implemented flows
 - ✅ Zero-state handling — live screen starts clean until the first real meter sample
-- ❌ Milestone acceptance review — full checklist walk, then tag `milestone-mock-e2e`
+- ✅ Milestone acceptance review — checklist walked, smokes green, tagged `milestone-mock-e2e` (Aug 21)
 - ❌ Accessibility pass (contrast, touch targets, screen reader labels)
 
 ---
@@ -87,13 +87,14 @@ References: [development.md](development.md) · [BACKEND.md](BACKEND.md) ·
 |---|---|---|
 | Functional (API) | 8 | 0 |
 | Functional (UI/E2E browser) | 7 | 0 |
-| Mobile / device | 3 | 4 |
+| Mobile / device | 6 | 1 |
 | Regression | 1 | 3 |
 | Negative & edge cases | 3 | 2 |
 | Security | 2 | 2 |
 | Performance & reliability | 1 | 3 |
-| Usability & acceptance | 2 | 2 |
-| **Total** | **27** | **16** |
+| Usability & acceptance | 3 | 1 |
+| **Total** | **31** | **12** |
 
-**Next up:** the remaining phone-test passes (§3) — they gate the
-`milestone-mock-e2e` acceptance review in §8.
+**Next up:** the remaining ❌ items are hardening work beyond the mock
+milestone — automated tests + CI (§4), security review (§6), and load/soak
+testing (§7) are the highest-leverage ones before real Maya + OCPP.
