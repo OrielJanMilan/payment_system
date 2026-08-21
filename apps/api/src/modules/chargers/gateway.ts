@@ -25,6 +25,20 @@ export function chargePoint(): MockChargePoint {
   return cp;
 }
 
+/* Latest live sample per session — the polling fallback for clients whose
+   SSE stream is buffered or dropped by a proxy/tunnel. */
+export interface LiveSample {
+  energyWh: number;
+  powerKw: number;
+  soc: number | null;
+  at: string;
+}
+const lastSamples = new Map<string, LiveSample>();
+
+export function latestSample(sessionId: string): LiveSample | null {
+  return lastSamples.get(sessionId) ?? null;
+}
+
 /* THE billing rule: register delta × pinned tariff, peso rounded half-up at
    the end. Samples never feed this. */
 export function amountForWh(wh: number, tariffCentavosPerKwh: number): number {
@@ -65,6 +79,12 @@ function handleEvent(event: NormalizedEvent): void {
       const s = chargingByTransaction(event.transactionId);
       if (!s) break; // sample for a session we don't consider live — ignore
       const runningWh = event.registerWh - s.meter_start_wh;
+      lastSamples.set(s.id, {
+        energyWh: runningWh,
+        powerKw: event.powerKw,
+        soc: event.soc,
+        at: event.at,
+      });
       publish(s.id, {
         type: "meter",
         energyWh: runningWh,

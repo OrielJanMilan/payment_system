@@ -1,7 +1,7 @@
 import { Router } from "express";
 import { completedSessions, createSession, getSession } from "./service.ts";
 import { subscribe } from "./events.ts";
-import { requestStop } from "../chargers/gateway.ts";
+import { latestSample, requestStop } from "../chargers/gateway.ts";
 
 export const sessionsRouter = Router();
 
@@ -44,6 +44,18 @@ sessionsRouter.post("/sessions/:id/stop", (req, res) => {
   res.status(202).json({ ok: true });
 });
 
+/* Polling fallback for the Live screen: current session + latest meter
+   sample in one response. Used when the SSE stream is buffered or dropped
+   (tunnels and proxies routinely do this). */
+sessionsRouter.get("/sessions/:id/live", (req, res) => {
+  const session = getSession(req.params.id);
+  if (!session) {
+    res.status(404).json({ error: "session_not_found" });
+    return;
+  }
+  res.json({ session, sample: latestSample(session.id) });
+});
+
 sessionsRouter.get("/sessions/:id", (req, res) => {
   const session = getSession(req.params.id);
   if (!session) {
@@ -69,6 +81,9 @@ sessionsRouter.get("/sessions/:id/events", (req, res) => {
     Connection: "keep-alive",
     "X-Accel-Buffering": "no",
   });
+  /* 2 KB comment preamble defeats proxies that buffer the first chunk of a
+     streaming response before forwarding anything (tunnels do this). */
+  res.write(":" + " ".repeat(2048) + "\n\n");
   res.write(`data: ${JSON.stringify({ type: "state", state: session.state, session })}\n\n`);
 
   const unsubscribe = subscribe(session.id, (event) => {

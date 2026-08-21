@@ -85,7 +85,12 @@
     Object.keys(screens).forEach(function (name) {
       screens[name].hidden = name !== active;
     });
-    if (active === "scan") { renderQuickstart(); startScanner(); } else { stopScanner(); }
+    /* Never open the camera while a processing overlay is up (e.g. the
+       return-from-checkout confirmation on the scan route). */
+    if (active === "scan") {
+      renderQuickstart();
+      if (authOverlay.hidden) startScanner(); else stopScanner();
+    } else { stopScanner(); }
     if (active === "live") enterLive(); else leaveLive();
     if (active === "start") startAvailabilityPoll(); else stopAvailabilityPoll();
     if (active === "history") loadHistory();
@@ -418,7 +423,8 @@
   var es = null;
   var esBackoff = 1000;
   var lastDataAt = 0;
-  var staleTimer = null;
+  var pollTimer = null;
+  var pollBusy = false;
   var liveStartedAt = null;
 
   function enterLive() {
@@ -430,20 +436,45 @@
       " held · the unused amount is released when you stop";
     liveStartedAt = session.startedAt || new Date().toISOString();
     if (!es) connectEvents();
-    if (!staleTimer) {
+    if (!pollTimer) {
       lastDataAt = Date.now();
-      staleTimer = setInterval(function () {
-        if (Date.now() - lastDataAt > 10000) {
-          $("live-title").textContent = "Reconnecting…";
-        }
-      }, 2000);
+      pollTimer = setInterval(pollLive, 3000);
     }
   }
 
   function leaveLive() {
     if (es) { es.close(); es = null; }
-    clearInterval(staleTimer);
-    staleTimer = null;
+    clearInterval(pollTimer);
+    pollTimer = null;
+  }
+
+  /* Fallback for stalled SSE (tunnels/proxies buffer or drop event streams):
+     whenever the stream has been quiet, poll the live endpoint. This keeps
+     the numbers moving AND catches ended/start_failed so the driver is never
+     stuck on a dead Live screen. */
+  function pollLive() {
+    if (!session || currentRoute() !== "live") return;
+    if (Date.now() - lastDataAt < 4000) return; // SSE is healthy
+    if (pollBusy) return;
+    pollBusy = true;
+    api("/sessions/" + session.id + "/live").then(function (r) {
+      pollBusy = false;
+      if (!r.ok) { $("live-title").textContent = "Reconnecting…"; return; }
+      $("live-title").textContent = "Charging";
+      var s = r.body.session;
+      if (s.state === "ended") { onSessionEnded(s); return; }
+      if (s.state === "start_failed") {
+        localStorage.removeItem("activeSessionId");
+        returnToStartOf(s.id, "Charging stopped before it began — the hold has been released.");
+        return;
+      }
+      session = s;
+      if (s.startedAt) liveStartedAt = s.startedAt;
+      if (r.body.sample) updateLive(r.body.sample);
+    }).catch(function () {
+      pollBusy = false;
+      $("live-title").textContent = "Reconnecting…";
+    });
   }
 
   function connectEvents() {
@@ -530,7 +561,10 @@
     $("btn-stop").disabled = true;
     $("btn-stop").textContent = "Stopping…";
     post("/sessions/" + session.id + "/stop").then(function () {
-      /* The session_ended event lands via SSE and routes to the receipt. */
+      /* The ended event normally lands via SSE; force the poll fallback to
+         engage immediately in case the stream is dead. */
+      lastDataAt = 0;
+      pollLive();
     });
   });
 
@@ -696,6 +730,7 @@
     }
 
     if (paymentReturn) {
+      showOverlay("Confirming payment…"); // before render(), so no camera starts
       render();
       resumePaymentReturn(paymentReturn);
       return;
