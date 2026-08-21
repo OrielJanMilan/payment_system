@@ -1,5 +1,10 @@
 # Development Progress
 
+**Overall completion: 49 / 80 — 61%**
+`████████████░░░░░░░░` Stage 1: 49/49 (100%) · Stage 2: 0/31 (0%)
+
+*(Recount when flipping items: `grep -c '^- ✅' development.md` vs `'^- ❌'`.)*
+
 Step-by-step tracker, organized in stages:
 
 - **Stage 1 — Mock end-to-end (✅ COMPLETE, tagged `milestone-mock-e2e`)**: full
