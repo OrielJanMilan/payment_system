@@ -61,6 +61,19 @@ export interface SessionDto {
   stopReason: string | null;
 }
 
+export interface PaymentIntentDto {
+  id: string;
+  sessionId: string;
+  provider: string;
+  state: PaymentIntentState;
+  method: string | null;
+  prepay: boolean;
+  holdCentavos: number;
+  capturedCentavos: number | null;
+  createdAt: string;
+  updatedAt: string;
+}
+
 /* Envelope streamed over GET /sessions/{id}/events (SSE). */
 export type SessionEvent =
   | { type: "state"; state: SessionState; session: SessionDto }

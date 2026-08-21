@@ -1,29 +1,13 @@
-import express from "express";
 import { config } from "./config.ts";
-import { db, migrate } from "./db/db.ts";
+import { migrate } from "./db/db.ts";
 import { seed } from "./db/seed.ts";
-import { chargersRouter } from "./modules/chargers/router.ts";
-import { sessionsRouter } from "./modules/sessions/router.ts";
 import { startExpirySweep } from "./modules/sessions/service.ts";
+import { createApp } from "./app.ts";
 
 migrate();
 seed();
 startExpirySweep();
 
-const app = express();
-app.use(express.json());
-app.use(chargersRouter);
-app.use(sessionsRouter);
-
-app.get("/health", (_req, res) => {
-  const row = db.prepare("SELECT COUNT(*) AS n FROM chargers").get() as { n: number };
-  res.json({ ok: true, chargers: row.n });
-});
-
-/* The driver PWA — served from the same origin as the API so the phone
-   needs exactly one URL and no CORS is involved. */
-app.use(express.static(config.webRoot));
-
-app.listen(config.port, () => {
+createApp().listen(config.port, () => {
   console.log(`api + web on http://localhost:${config.port}`);
 });

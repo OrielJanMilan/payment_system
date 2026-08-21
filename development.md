@@ -41,15 +41,16 @@ References: [BACKEND.md](BACKEND.md) · [SCREEN_FUNCTIONALITY.md](SCREEN_FUNCTIO
 
 ## Phase 3 — Mock Maya payment provider
 
-- ❌ 3.1 `PaymentProvider` interface + registry — the seam from BACKEND.md §1; only `providers/` code knows provider types
-- ❌ 3.2 Payment intent state machine: `CREATED → PENDING_AUTH → AUTHORIZED → CAPTURING → CAPTURED` + `AUTH_FAILED / EXPIRED / VOIDED` (per SCREEN_FUNCTIONALITY.md mapping table)
-- ❌ 3.3 `MockMaya` adapter — `createCheckout` returns a redirect URL to a local hosted-checkout page; `capture`, `void`, `refund` implemented against in-memory/mock state
-- ❌ 3.4 Mock hosted-checkout page — mimics the Maya redirect: shows amount + method, buttons for **Authorize**, **Fail**, **Let it expire**; redirects back to the app's success/failure URL
-- ❌ 3.5 Mock webhook flow — the checkout page's outcome fires a signed (HMAC) webhook to `POST /webhooks/maya`; handler verifies signature, persists raw payload to `provider_events`, applies idempotent intent transition (unique `event_id`)
-- ❌ 3.6 `POST /payments/checkout` — creates checkout via the registry-resolved adapter, returns redirect URL (S3 / C2 "Hold & start")
-- ❌ 3.7 Intent polling endpoint for the return-from-checkout wait (`GET /payments/{id}`)
-- ❌ 3.8 Capture on session end — exact metered amount captured, remainder "released"; void on charger-start failure
-- ❌ 3.9 QR Ph prepay fallback path — intent flagged prepay, "refund" of unused amount on completion (mocked)
+- ✅ 3.1 `PaymentProvider` interface + registry (`modules/payments/providers/provider.ts`) — only `providers/` code knows provider types
+- ✅ 3.2 Payment intent state machine — guarded idempotent transitions: `CREATED → PENDING_AUTH → AUTHORIZED → CAPTURING → CAPTURED` + `AUTH_FAILED / EXPIRED / VOIDED / REFUNDED`
+- ✅ 3.3 `MockMaya` adapter — `createCheckout` → local hosted-page redirect URL; `capture` (never above the hold), `voidHold`, `refund` against in-memory checkout state
+- ✅ 3.4 Mock hosted-checkout page (`/mock-maya/checkout/{id}`) — amount + method, **Authorize / Fail / Expire** buttons, 410 once used, redirects back to `/?payment_return={intentId}`
+- ✅ 3.5 Mock webhook flow — HMAC-signed delivery over real HTTP to `POST /webhooks/maya`; signature verified (timing-safe), raw payload persisted to `provider_events`, unique `event_id` makes replays recorded no-ops
+- ✅ 3.6 `POST /payments/checkout` — intent + checkout via the registry-resolved adapter; 409 when the session isn't payable
+- ✅ 3.7 `GET /payments/{id}` polling endpoint for the return-from-checkout wait
+- ✅ 3.8 `captureForSession` (exact metered amount + mock OR number) and `voidForSession` — wired to charger events in Phase 4; `paymentsBus` emits `authorized/captured/voided` for the charger gateway to consume
+- ✅ 3.9 QR Ph prepay fallback — `supportsHold()` false → prepay intent, page copy switches to "Pay ₱…", unused amount refunded on capture
+  - Verified: 30-check HTTP smoke test (`npm run smoke:p3`) + real-browser round-trip (Authorize click → webhook → `AUTHORIZED` → redirect back to the PWA)
 
 ## Phase 4 — Mock OCPP charger (simulator)
 
