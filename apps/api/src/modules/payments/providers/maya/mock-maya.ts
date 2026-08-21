@@ -58,7 +58,7 @@ export const mockMaya: PaymentProvider = {
       capturedCentavos: null,
       refundedCentavos: null,
     });
-    return { checkoutId: id, redirectUrl: `${config.baseUrl}/mock-maya/checkout/${id}` };
+    return { checkoutId: id, redirectUrl: `${request.baseUrl}/mock-maya/checkout/${id}` };
   },
 
   capture(checkoutId: string, amountCentavos: number): void {

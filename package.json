@@ -9,6 +9,7 @@
     "dev": "npm run dev --workspace apps/api"
   },
   "devDependencies": {
-    "jsqr": "^1.4.0"
+    "jsqr": "^1.4.0",
+    "qrcode": "^1.5.4"
   }
 }

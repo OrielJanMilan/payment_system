@@ -12,7 +12,9 @@ paymentsRouter.post("/payments/checkout", (req, res) => {
     res.status(400).json({ error: "sessionId (string) and method (string) required" });
     return;
   }
-  const result = createCheckout(sessionId, method);
+  /* Behind cloudflared, x-forwarded-proto says https (trust proxy is on). */
+  const requestBase = `${req.protocol}://${req.get("host")}`;
+  const result = createCheckout(sessionId, method, requestBase);
   if (!result.ok) {
     res.status(result.error === "session_not_found" ? 404 : 409).json({ error: result.error });
     return;

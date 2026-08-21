@@ -91,8 +91,14 @@ export type CheckoutCreation =
   | { ok: false; error: "session_not_found" | "session_not_payable" };
 
 /* S3 / C2 "Hold & start": create the intent and the provider checkout.
-   The hold amount comes off the session, where it was pinned server-side. */
-export function createCheckout(sessionId: string, method: string): CheckoutCreation {
+   The hold amount comes off the session, where it was pinned server-side.
+   baseUrl is the client's public origin (from the request), so redirects
+   come back to whatever host the driver is actually on. */
+export function createCheckout(
+  sessionId: string,
+  method: string,
+  baseUrl: string = config.baseUrl
+): CheckoutCreation {
   const session = sessions.getSession(sessionId);
   if (!session) return { ok: false, error: "session_not_found" };
   if (session.state !== "pending_payment") return { ok: false, error: "session_not_payable" };
@@ -112,8 +118,9 @@ export function createCheckout(sessionId: string, method: string): CheckoutCreat
     amountCentavos: session.holdCentavos,
     method,
     prepay,
-    successUrl: `${config.baseUrl}/?payment_return=${id}`,
-    failureUrl: `${config.baseUrl}/?payment_return=${id}`,
+    baseUrl,
+    successUrl: `${baseUrl}/?payment_return=${id}`,
+    failureUrl: `${baseUrl}/?payment_return=${id}`,
   });
   transitionIntent(id, "PENDING_AUTH", { checkout_id: checkout.checkoutId });
 

@@ -7,6 +7,9 @@ export interface CheckoutRequest {
   amountCentavos: number;
   method: string;
   prepay: boolean; // true → charge now, refund unused (methods without auth/capture)
+  /* Public origin of the requesting client (derived per-request, so the same
+     server works via localhost and a tunnel at once). */
+  baseUrl: string;
   successUrl: string;
   failureUrl: string;
 }

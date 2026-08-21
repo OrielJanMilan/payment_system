@@ -16,6 +16,9 @@ export function createApp(): express.Express {
   initChargerGateway();
 
   const app = express();
+  /* Honor x-forwarded-* from the tunnel so req.protocol/host reflect the
+     public origin the driver is actually using. */
+  app.set("trust proxy", true);
   /* Keep the raw body around: webhook signatures are computed over exact bytes. */
   app.use(
     express.json({
