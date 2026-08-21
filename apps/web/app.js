@@ -435,6 +435,7 @@
     $("hold-caption").textContent = peso(session.holdCentavos) +
       " held · the unused amount is released when you stop";
     liveStartedAt = session.startedAt || new Date().toISOString();
+    resetLiveDisplay();
     if (!es) connectEvents();
     if (!pollTimer) {
       lastDataAt = Date.now();
@@ -446,6 +447,19 @@
     if (es) { es.close(); es = null; }
     clearInterval(pollTimer);
     pollTimer = null;
+  }
+
+  /* Zero-state until the first real meter sample lands — never show the
+     previous session's (or any placeholder) numbers. */
+  function resetLiveDisplay() {
+    $("live-cost").textContent = peso(0);
+    $("live-stats").textContent = "charged so far · 0.0 kWh · 0 kW · 0 min";
+    $("ring-progress").setAttribute("stroke-dasharray", "0 653.5");
+    $("ring-pct").textContent = "—";
+    $("engage-pill").hidden = true;
+    $("hold-bar").setAttribute("aria-valuenow", "0");
+    $("hold-bar-fill").style.width = "0%";
+    $("hold-bar-fill").classList.remove("is-warning");
   }
 
   /* Fallback for stalled SSE (tunnels/proxies buffer or drop event streams):
