@@ -109,6 +109,54 @@ independent of each other (both slot in behind existing seams — the
 `PaymentProvider` registry and the normalized charger-event set) and can run in
 parallel; Phase 3 hardening should land before anything public.
 
+### Stage 2 resources — external accounts, credentials & access
+
+Everything Stage 2 needs from outside this repo, by phase it blocks. Status
+lives in the table (✅/❌) so these don't skew the build-step completion count.
+Expanded detail per item: BACKEND.md §8.
+
+**Payments — Maya** *(blocks Phase 1; start the onboarding first — longest lead time)*
+
+| Status | Resource | Detail | From |
+|---|---|---|---|
+| ❌ | Maya Business account | Merchant onboarding: business registration docs, settlement bank account | Business owner + Maya |
+| ❌ | Maya sandbox API keys | Checkout API public/secret key pair for the sandbox spike | Maya developer portal |
+| ❌ | Webhook registration | Our `/webhooks/maya` URL registered; webhook signing secret; their source IPs (needs the Phase 4 public URL, or a stable tunnel meanwhile) | Maya |
+| ❌ | Capability confirmation | Auth/capture split per method (wallet / card / QR Ph), hold validity window, refund API, settlement cadence & fees — decides hold vs prepay lead | Maya onboarding contact |
+| ❌ | Production keys | Issued after onboarding approval; Secrets Manager only, never in repo | Maya *(Phase 5)* |
+| ❌ | Maya Vault (tokenization) | Saved payment methods → true one-tap Quick Start | Maya *(Phase 5)* |
+
+**Chargers — CSMS / OCPP** *(blocks Phase 2)*
+
+| Status | Resource | Detail | From |
+|---|---|---|---|
+| ❌ | Path decision (A/B) | Answers to the Charging_Synchronization.md §6 questionnaire — decides everything below | BTC Power charger platform team |
+| ❌ | CSMS API credentials + docs | Remote start/stop, connector status, charger registry (path A) — or direct charger/OCPP access (path B) | Charger platform team |
+| ❌ | CSMS event feed | `session.started` / `meter` / `ended` / `connector.status` as signed webhooks (or polling endpoint), with replay/transaction-detail endpoint | Charger platform team |
+| ❌ | One pilot charger | Real unit with billing-grade meter, on a test tariff, physically accessible for testing | Operations |
+| ❌ | Charger config rights | Ability to set `MeterValueSampleInterval=30`, `StopTxnSampledData` (energy register) on the pilot | Charger platform team |
+
+**Infrastructure** *(blocks Phase 4)*
+
+| Status | Resource | Detail | From |
+|---|---|---|---|
+| ❌ | GitHub remote for this repo | Currently local-only; prerequisite for CI (Phase 3.2) and deploys | Us — just push |
+| ❌ | Domain + TLS | The URL printed in every QR code — pick once, early; DNS via the existing Cloudflare account | Business (domain purchase) + Cloudflare |
+| ❌ | Hosting account | Fly.io / Railway / AWS for the pilot monolith | DevOps |
+| ❌ | Managed PostgreSQL | Supabase or RDS (replaces dev SQLite) | DevOps |
+| ❌ | Error monitoring + alert route | Sentry (or similar) + who gets paged on the capture dead-letter ("money in limbo") | DevOps |
+
+**Communications & compliance** *(blocks Phase 5)*
+
+| Status | Resource | Detail | From |
+|---|---|---|---|
+| ❌ | SMS provider account | PH-capable sender for receipts + OTP (Semaphore / M360 / Twilio); per-message cost feeds the channel decision | Product/finance |
+| ❌ | Email sender | SES or equivalent with SPF/DKIM on the domain | DevOps |
+| ❌ | BIR receipt registration | Official receipt series/numbering + format requirements for the PDF | Finance/accounting |
+| ❌ | Tariff sign-off | ₱/kWh per site, idle fee, hold sizing bounds | Business |
+| ❌ | Legal/regulatory review | ERC per-kWh resale rules, consumer disclosure, NPC privacy registration | Legal |
+| ❌ | Pen test vendor | Security review before production exit | Security/procurement |
+
 ### Phase 1 — Real Maya (sandbox)
 
 - ❌ 1.1 Maya Business onboarding + sandbox application → public/secret key pair
