@@ -7,7 +7,7 @@ Legend: 🔴 open · 🟡 in progress · ✅ fixed
 
 ---
 
-## #1 🔴 Re-scanning the QR mid-charge does not return to the Live screen
+## #1 ✅ Re-scanning the QR mid-charge does not return to the Live screen
 
 **Reported:** Aug 21, 2026 (phone testing)
 
@@ -35,7 +35,7 @@ Start when there is no live session.
 
 ---
 
-## #2 🔴 Charging finished while app was closed — receipt never shown
+## #2 ✅ Charging finished while app was closed — receipt never shown
 
 **Reported:** Aug 21, 2026 (phone testing)
 
@@ -61,7 +61,7 @@ the server data and keep `activeSessionId` until the driver taps **Done**
 
 ---
 
-## #3 🔴 Closing the app mid-payment loses the retryable session (minor)
+## #3 ✅ Closing the app mid-payment loses the retryable session (minor)
 
 **Reported:** Aug 21, 2026 (found during development, same family as #1/#2)
 
@@ -81,3 +81,12 @@ resume only handles `charging`/`pending_start`, not `pending_payment`.
 **Proposed fix:** in the resume branch, a `pending_payment` session that is
 still inside its TTL restores `pendingSession` + charger and lands on Start
 with the "reserved for you" state and payment methods enabled.
+
+---
+
+*#1–#3 fixed in `60a108b` (Aug 21, 2026): `boot()` now resolves the driver's
+own session before honoring a deep link — charging → Live, ended → Receipt
+(until Done; a scanned slug continues to that charger after Done),
+pending_payment in TTL → Start with the reservation restored, start_failed →
+one-time "hold released" notice. Verified in-browser across all four resume
+states plus fresh-user regression.*
