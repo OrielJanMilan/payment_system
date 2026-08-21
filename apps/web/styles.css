@@ -809,3 +809,23 @@ a:hover { color: var(--primary-deep); }
   }
   .sheet-backdrop { align-items: center; }
 }
+
+/* ---------- Phase 5 additions ---------- */
+
+.vf-video {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.vf-video:not([hidden]) ~ svg:not(.vf-brackets) { display: none; }
+
+#start-avail.is-unavailable { color: var(--danger); }
+
+.session-empty {
+  padding: 28px 0;
+  text-align: center;
+  color: var(--ink-muted);
+}

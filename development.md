@@ -65,15 +65,15 @@ References: [BACKEND.md](BACKEND.md) · [SCREEN_FUNCTIONALITY.md](SCREEN_FUNCTIO
 
 ## Phase 5 — Wire the PWA to the API (replace every `TODO(api)`)
 
-- ❌ 5.1 S1 code entry → real `GET /chargers/{code}`; unknown code → inline error
-- ❌ 5.2 Real QR scanning in the viewfinder (BarcodeDetector with jsQR fallback); decoded deep link → Start screen
-- ❌ 5.3 C2 "Hold & start" → `POST /sessions` + `POST /payments/checkout` → full-page redirect to the mock hosted checkout → on return, poll intent until webhook lands → `AUTHORIZED` → Live; `AUTH_FAILED/EXPIRED` → back with inline error
-- ❌ 5.4 Live screen driven by SSE (kWh, ₱, kW, SoC, hold bar) instead of the client-side timer; reconnect with backoff + "reconnecting" hint after 10 s
-- ❌ 5.5 Session resume — active session id in `localStorage`; reopening while `charging` routes straight to Live and re-subscribes
-- ❌ 5.6 Stop flow → `POST /sessions/{id}/stop` → server captures exact amount → Receipt rendered from server data (captured ₱, hold released, mock OR number)
-- ❌ 5.7 Failure-path UI verified end-to-end: auth failed, checkout expired, charger start failed (hold released message), charger unavailable
-- ❌ 5.8 C1 Quick Start card backed by real last-session data + mock saved payment token (or hidden for first-time users)
-- ❌ 5.9 History screen served from `GET /me/sessions` mock data (no OTP — dev-stub identity only for this milestone)
+- ✅ 5.1 S1 code entry → real `GET /chargers/{code}` (auto-uppercase, format validation); unknown code → inline error
+- ✅ 5.2 Real QR scanning — BarcodeDetector with vendored jsQR fallback (`apps/web/vendor/`), rear camera, decodes `/c/{slug}` URLs and bare `CHG-####` codes; graceful "camera unavailable" fallback to code entry. On-device validation happens in Phase 6 (camera needs the phone + HTTPS)
+- ✅ 5.3 C2 "Hold & start" → session + checkout → full-page redirect to the hosted checkout → return poll → `AUTHORIZED` → "Starting charger…" → Live. Retry after `AUTH_FAILED`/`EXPIRED` **reuses the pending session** (connector shown as "reserved for you"); expired retry-session recreates cleanly
+- ✅ 5.4 Live screen fully SSE-driven (₱, kWh, kW, SoC ring, hold bar with 75% warning); manual reconnect with exponential backoff; header flips to "Reconnecting…" after 10 s without data (data heartbeats every 15 s)
+- ✅ 5.5 Session resume — `activeSessionId` in localStorage; reload mid-charge lands straight on Live and re-subscribes (verified live)
+- ✅ 5.6 Stop flow → confirmation sheet → `POST /sessions/{id}/stop` → SSE `ended` event routes to Receipt rendered from server data (captured ₱, rate, hold released / refund-issued for prepay, mock OR number; refetches until capture finalizes)
+- ✅ 5.7 Failure paths verified in-browser: payment failed → Start with retry; charger rejected start → "hold has been released" (incl. the fast-void race found and fixed); connector in use → CTA gated "in use right now"; invalid deep link → S1 error
+- ✅ 5.8 C1 Quick Start card from real last-session data (hidden for first-time users); busy last charger swaps the caption; still confirms on the hosted page (real saved tokens are product Phase 2/3)
+- ✅ 5.9 History from `GET /me/sessions` (dev-stub identity): month summary + insight line computed client-side, rows open their server-rendered receipts
 
 ## Phase 6 — Test on phone (mock end-to-end)
 

@@ -50,6 +50,12 @@ const SELECT_SESSION = `
   FROM sessions s JOIN chargers c ON c.id = s.charger_id`;
 
 function toDto(row: SessionRow): SessionDto {
+  const intent = db
+    .prepare(
+      `SELECT method, prepay FROM payment_intents WHERE session_id = ?
+       ORDER BY created_at DESC LIMIT 1`
+    )
+    .get(row.id) as { method: string | null; prepay: number } | undefined;
   return {
     id: row.id,
     state: row.state,
@@ -69,7 +75,18 @@ function toDto(row: SessionRow): SessionDto {
     amountCentavos: row.amount_centavos,
     receiptNo: row.receipt_no,
     stopReason: row.stop_reason,
+    paymentMethod: intent?.method ?? null,
+    prepay: intent?.prepay === 1,
   };
+}
+
+/* History for the milestone's dev-stub identity: every completed session
+   (real OTP-scoped accounts are out of scope until after the mock milestone). */
+export function completedSessions(limit = 50): SessionDto[] {
+  const rows = db
+    .prepare(`${SELECT_SESSION} WHERE s.state = 'ended' ORDER BY s.ended_at DESC LIMIT ?`)
+    .all(limit) as unknown as SessionRow[];
+  return rows.map(toDto);
 }
 
 export type CreateSessionResult =

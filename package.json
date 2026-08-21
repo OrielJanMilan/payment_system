@@ -7,5 +7,8 @@
   ],
   "scripts": {
     "dev": "npm run dev --workspace apps/api"
+  },
+  "devDependencies": {
+    "jsqr": "^1.4.0"
   }
 }

@@ -1,5 +1,5 @@
 import { Router } from "express";
-import { createSession, getSession } from "./service.ts";
+import { completedSessions, createSession, getSession } from "./service.ts";
 import { subscribe } from "./events.ts";
 import { requestStop } from "../chargers/gateway.ts";
 
@@ -21,6 +21,11 @@ sessionsRouter.post("/sessions", (req, res) => {
     return;
   }
   res.status(201).json(result.session);
+});
+
+/* S6 history — dev-stub identity for the mock milestone (no OTP). */
+sessionsRouter.get("/me/sessions", (_req, res) => {
+  res.json(completedSessions());
 });
 
 /* S4 "Stop charging" (confirmation sheet) → RemoteStopTransaction. The stop
@@ -69,7 +74,8 @@ sessionsRouter.get("/sessions/:id/events", (req, res) => {
   const unsubscribe = subscribe(session.id, (event) => {
     res.write(`data: ${JSON.stringify(event)}\n\n`);
   });
-  const heartbeat = setInterval(() => res.write(":hb\n\n"), 15_000);
+  /* A data event, not a comment — the client uses it to detect staleness. */
+  const heartbeat = setInterval(() => res.write(`data: {"type":"hb"}\n\n`), 15_000);
 
   req.on("close", () => {
     clearInterval(heartbeat);

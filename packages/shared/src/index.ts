@@ -59,6 +59,9 @@ export interface SessionDto {
   amountCentavos: number | null;
   receiptNo: string | null;
   stopReason: string | null;
+  /* From the session's latest payment intent (null before checkout). */
+  paymentMethod: string | null;
+  prepay: boolean;
 }
 
 export interface PaymentIntentDto {
@@ -74,7 +77,9 @@ export interface PaymentIntentDto {
   updatedAt: string;
 }
 
-/* Envelope streamed over GET /sessions/{id}/events (SSE). */
+/* Envelope streamed over GET /sessions/{id}/events (SSE). The hb event exists
+   so clients can detect a stale stream (SSE comments are invisible to JS). */
 export type SessionEvent =
   | { type: "state"; state: SessionState; session: SessionDto }
-  | { type: "meter"; energyWh: number; powerKw: number; soc: number | null; at: string };
+  | { type: "meter"; energyWh: number; powerKw: number; soc: number | null; at: string }
+  | { type: "hb" };
