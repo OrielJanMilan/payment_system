@@ -8,7 +8,8 @@
     "start": "tsx src/index.ts",
     "typecheck": "tsc --noEmit",
     "smoke": "tsx scripts/smoke-phase2.ts",
-    "smoke:p3": "tsx scripts/smoke-phase3.ts"
+    "smoke:p3": "tsx scripts/smoke-phase3.ts",
+    "smoke:p4": "tsx scripts/smoke-phase4.ts"
   },
   "dependencies": {
     "@payment-system/shared": "*",

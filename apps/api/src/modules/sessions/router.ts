@@ -1,6 +1,7 @@
 import { Router } from "express";
 import { createSession, getSession } from "./service.ts";
 import { subscribe } from "./events.ts";
+import { requestStop } from "../chargers/gateway.ts";
 
 export const sessionsRouter = Router();
 
@@ -20,6 +21,22 @@ sessionsRouter.post("/sessions", (req, res) => {
     return;
   }
   res.status(201).json(result.session);
+});
+
+/* S4 "Stop charging" (confirmation sheet) → RemoteStopTransaction. The stop
+   is asynchronous: the client stays on Live and lands on the receipt when the
+   session_ended event flows through SSE. */
+sessionsRouter.post("/sessions/:id/stop", (req, res) => {
+  const session = getSession(req.params.id);
+  if (!session) {
+    res.status(404).json({ error: "session_not_found" });
+    return;
+  }
+  if (requestStop(session.id) !== "ok") {
+    res.status(409).json({ error: "session_not_charging" });
+    return;
+  }
+  res.status(202).json({ ok: true });
 });
 
 sessionsRouter.get("/sessions/:id", (req, res) => {

@@ -54,13 +54,14 @@ References: [BACKEND.md](BACKEND.md) · [SCREEN_FUNCTIONALITY.md](SCREEN_FUNCTIO
 
 ## Phase 4 — Mock OCPP charger (simulator)
 
-- ❌ 4.1 `chargers` module with the normalized internal event set: `session_started`, `meter_sample`, `session_ended`, `connector_status` (Charging_Synchronization.md §1 adapter note)
-- ❌ 4.2 Virtual charge point — in-process simulator holding a meter register (Wh) per connector; accepts `remote-start(sessionRef)` / `remote-stop`, emits `StartTransaction`-equivalent (meterStart), periodic meter samples (accelerated cadence for demo), `StopTransaction`-equivalent (meterStop, reason)
-- ❌ 4.3 Billing math from **register delta** only: `(meterStop − meterStart)/1000 × pinned tariff`, peso rounded half-up at the end — never the sample sum
-- ❌ 4.4 Start-timeout watchdog: no `session_started` within 90 s of accepted remote-start → void hold, free connector, session `start_failed` (S3 off-screen behavior)
-- ❌ 4.5 90%-of-hold soft-stop: backend auto-stops the session before the running cost exceeds the authorization
-- ❌ 4.6 Connector availability: simulator drives `AVAILABLE / IN USE / OFFLINE` for the S2/C2 pill; CTA gated when not available
-- ❌ 4.7 Simulator control panel (dev-only page or endpoints) to force scenarios: refuse start, stop reason `EVDisconnected`, go offline mid-session, vehicle-full stop
+- ✅ 4.1 Charger gateway (`modules/chargers/gateway.ts`) consuming the normalized event set `session_started / meter_sample / session_ended / connector_status`; subscribes to `paymentsBus` for authorized → remote-start; unauthorized starts alarmed, never billed
+- ✅ 4.2 Virtual charge point (`modules/chargers/mock-cp.ts`) — monotonic Wh meter register, `remote-start(sessionRef)` with spin-up delay ("Accepted ≠ started"), sample stream (configurable cadence + time-acceleration), stop reasons, offline queueing of the end event
+- ✅ 4.3 Billing from **register delta** only (`amountForWh`): `(meterStop − meterStart) × tariff / 1000`, peso rounded half-up; capture clamped to the hold with an alarm
+- ✅ 4.4 Start-timeout watchdog (90 s, env-tunable): rejected or silent starts → hold voided, connector freed, session `start_failed`
+- ✅ 4.5 90%-of-hold soft-stop on the live sample stream — auto remote-stop before the cost exceeds the authorization
+- ✅ 4.6 Connector availability driven by CP status events (`AVAILABLE / IN_USE / OFFLINE`); plus `POST /sessions/{id}/stop` for the driver's Stop action (202 async; 409 when not charging)
+- ✅ 4.7 Simulator control panel — `/mock-cp/panel` (buttons + live state) over dev endpoints: reject start, silent start, unplug (EVDisconnected), vehicle full, power loss, offline/online
+  - Verified: 36-check smoke test (`npm run smoke:p4`) — happy path with capture + receipt, register-delta math, watchdog, soft-stop bounds, unplug, power-loss queue-and-reconnect; caught and fixed a reentrancy bug in the sampler; Phases 2–3 smokes still pass
 
 ## Phase 5 — Wire the PWA to the API (replace every `TODO(api)`)
 
