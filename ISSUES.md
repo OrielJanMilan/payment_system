@@ -147,3 +147,10 @@ Receipt → Done → scan → clean Start.
 the charger can see/stop the active session. Real deployment must tie resume
 to driver identity (OTP account or SMS-linked session URL); tracked implicitly
 under Stage 2 Phase 3 security hardening.
+
+---
+
+**On-device confirmation (Aug 21, 2026):** user re-tested on the phone and
+confirmed resume now works as expected after a full browser close and QR
+re-scan — mid-charge lands on Live, finished sessions land on the Receipt.
+All issues #1–#5 are closed and verified on device. No open issues.
