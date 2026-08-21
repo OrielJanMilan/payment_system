@@ -41,8 +41,18 @@ export function createApp(): express.Express {
   app.use(mockMayaRouter);
   app.use(mockCpRouter);
 
-  /* The driver PWA — same origin as the API: one URL for the phone, no CORS. */
-  app.use(express.static(config.webRoot));
+  /* The driver PWA — same origin as the API: one URL for the phone, no CORS.
+     no-store: phones reuse cached JS on tab restore / camera-opened links
+     without revalidating, which resurrects old code after every fix (the
+     "works on refresh, not on reopen" trap). Real hosting swaps this for
+     hashed asset names + long-lived caching. */
+  app.use(
+    express.static(config.webRoot, {
+      etag: false,
+      lastModified: false,
+      setHeaders: (res) => res.setHeader("Cache-Control", "no-store"),
+    })
+  );
 
   return app;
 }

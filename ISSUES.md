@@ -90,3 +90,33 @@ own session before honoring a deep link — charging → Live, ended → Receipt
 pending_payment in TTL → Start with the reservation restored, start_failed →
 one-time "hold released" notice. Verified in-browser across all four resume
 states plus fresh-user regression.*
+
+---
+
+## #4 ✅ Resume fixes ineffective after a full browser close (worked on refresh only)
+
+**Reported:** Aug 21, 2026 (phone re-test of #1/#2)
+
+**Steps to reproduce:** apply the #1–#3 fixes → close the browser app fully →
+reopen (or re-scan the QR). Refreshing the page behaves correctly; a cold
+reopen does not.
+
+**Root cause (two-part):**
+1. The app was served with `Cache-Control: public, max-age=0`. Mobile browsers
+   skip revalidation on tab restores and camera-opened links, so a cold reopen
+   ran the **stale cached app.js** from before the fixes — only a manual
+   refresh revalidated and picked up new code.
+2. Browsers can also restore the page from a snapshot (bfcache/tab restore)
+   without re-running scripts, so the boot-time resume routing never executed;
+   background tab-freezing additionally left the Live screen's timers dead.
+
+**Fix (`60a108b` follow-up):** static assets now served `Cache-Control:
+no-store` in dev (verified through the tunnel; real hosting will use hashed
+asset names + long-lived caching instead); `pageshow` with `persisted=true`
+re-runs the boot routing; `visibilitychange` → foreground forces an immediate
+live resync (reconnect SSE + poll). Verified: deep-link reopen mid-charge →
+Live, foreground resync updates cost, stop → receipt → Done.
+
+**Note for re-testing on a phone that already cached old code:** refresh once
+(or clear the tab) to pull current code — from then on cold reopens always
+fetch fresh.

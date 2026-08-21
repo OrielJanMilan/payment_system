@@ -846,5 +846,21 @@
     render();
   }
 
+  /* Mobile browsers can bring this page back from a snapshot (bfcache / tab
+     restore) without re-running scripts from the top — and they freeze timers
+     while the tab is backgrounded. Re-route from the server's truth on
+     restore, and revive the Live screen when the tab comes back forward. */
+  window.addEventListener("pageshow", function (e) {
+    if (e.persisted) boot();
+  });
+  document.addEventListener("visibilitychange", function () {
+    if (document.hidden) return;
+    if (currentRoute() === "live" && session) {
+      lastDataAt = 0; // force the poll fallback to resync immediately
+      if (!es) connectEvents();
+      pollLive();
+    }
+  });
+
   boot();
 })();
