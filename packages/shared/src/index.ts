@@ -31,6 +31,11 @@ export interface ChargerDto {
   connectors: ConnectorDto[];
   tariffCentavosPerKwh: number;
   holdCentavos: number;
+  /* Server-side resume (mock milestone): scanning a charger recovers the
+     session even when the browser lost its local storage. Single-driver demo
+     semantics — production ties this to driver identity (OTP / SMS link). */
+  activeSessionId: string | null;        // pending_start | charging on this charger
+  recentEndedSessionId: string | null;   // ended <30 min ago, receipt not acknowledged
 }
 
 export interface ConnectorDto {

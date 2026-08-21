@@ -120,3 +120,30 @@ Live, foreground resync updates cost, stop → receipt → Done.
 **Note for re-testing on a phone that already cached old code:** refresh once
 (or clear the tab) to pull current code — from then on cold reopens always
 fetch fresh.
+
+---
+
+## #5 ✅ Resume after full close still failed on phone — app depended on browser memory
+
+**Reported:** Aug 21, 2026 (phone re-test after #4; screenshot showed stale
+placeholder UI and re-scan landing on "Hold & start charging")
+
+**Root cause:** all resume logic keyed off `localStorage`. On a phone, the QR
+can open in a different browser context than the one that started the charge
+(camera → custom tab / different default browser), or the browser drops site
+storage on close — either way the app had no pointer, so a re-scan fell
+through to the Start screen. Client-side memory can never survive that.
+
+**Fix (`60a108b`/`cc24fe2` follow-up):** server-side resume. The charger
+payload now carries `activeSessionId` (pending_start/charging) and
+`recentEndedSessionId` (ended <30 min, receipt unacknowledged); the Start
+screen adopts them when the browser has no local pointer — live session →
+Live, fresh receipt → Receipt. "Done" now acknowledges the receipt server-side
+(`POST /sessions/{id}/ack`, migration 002) so a later scan doesn't resurrect
+it. Verified with cleared storage: scan mid-charge → Live; scan after finish →
+Receipt → Done → scan → clean Start.
+
+**Production note:** this is single-driver demo semantics — any phone scanning
+the charger can see/stop the active session. Real deployment must tie resume
+to driver identity (OTP account or SMS-linked session URL); tracked implicitly
+under Stage 2 Phase 3 security hardening.

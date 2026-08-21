@@ -2,6 +2,7 @@ import { Router } from "express";
 import { completedSessions, createSession, getSession } from "./service.ts";
 import { subscribe } from "./events.ts";
 import { latestSample, requestStop } from "../chargers/gateway.ts";
+import { db, nowIso } from "../../db/db.ts";
 
 export const sessionsRouter = Router();
 
@@ -21,6 +22,15 @@ sessionsRouter.post("/sessions", (req, res) => {
     return;
   }
   res.status(201).json(result.session);
+});
+
+/* Receipt acknowledgment ("Done" on the receipt): stops this session from
+   being re-surfaced by the server-side resume after a QR scan. */
+sessionsRouter.post("/sessions/:id/ack", (req, res) => {
+  const result = db
+    .prepare("UPDATE sessions SET acked_at = ? WHERE id = ? AND state = 'ended'")
+    .run(nowIso(), req.params.id);
+  res.json({ ok: result.changes > 0 });
 });
 
 /* S6 history — dev-stub identity for the mock milestone (no OTP). */

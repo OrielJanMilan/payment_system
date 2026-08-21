@@ -22,7 +22,24 @@ function toDto(row: ChargerRow): ChargerDto {
   const connectors = db
     .prepare("SELECT id, type, max_kw, status FROM connectors WHERE charger_id = ? ORDER BY id")
     .all(row.id) as unknown as ConnectorRow[];
+  /* Server-side resume: the charger knows its own live session, and the most
+     recent finished one whose receipt the driver hasn't acknowledged yet. */
+  const active = db
+    .prepare(
+      `SELECT id FROM sessions WHERE charger_id = ? AND state IN ('pending_start','charging')
+       ORDER BY created_at DESC LIMIT 1`
+    )
+    .get(row.id) as { id: string } | undefined;
+  const cutoff = new Date(Date.now() - 30 * 60 * 1000).toISOString();
+  const recentEnded = db
+    .prepare(
+      `SELECT id FROM sessions WHERE charger_id = ? AND state = 'ended'
+       AND acked_at IS NULL AND ended_at > ? ORDER BY ended_at DESC LIMIT 1`
+    )
+    .get(row.id, cutoff) as { id: string } | undefined;
   return {
+    activeSessionId: active?.id ?? null,
+    recentEndedSessionId: recentEnded?.id ?? null,
     code: row.code,
     qrSlug: row.qr_slug,
     siteName: row.site_name,

@@ -225,6 +225,15 @@
   var availTimer = null;
 
   function showStart(c, errorMsg, keepPending) {
+    /* Server-side resume (ISSUES.md #5): if this charger has a live session —
+       or a fresh unacknowledged receipt — adopt it instead of offering a new
+       start. Covers phones whose browser lost local storage (QR opened in a
+       different browser/context, storage cleared on close). */
+    if (!errorMsg && !keepPending && adoptServerSession(c)) return;
+    finishShowStart(c, errorMsg, keepPending);
+  }
+
+  function finishShowStart(c, errorMsg, keepPending) {
     if (!keepPending) pendingSession = null;
     charger = c;
     connectorId = pendingSession ? pendingSession.connectorId
@@ -233,6 +242,22 @@
     startError.hidden = !errorMsg;
     if (errorMsg) startError.textContent = errorMsg;
     navigate("start");
+  }
+
+  function adoptServerSession(c) {
+    var sid = c.activeSessionId || c.recentEndedSessionId;
+    /* A local pointer means boot() already routed by it — don't double-handle. */
+    if (!sid || localStorage.getItem("activeSessionId")) return false;
+    api("/sessions/" + sid).then(function (r) {
+      var s = r.ok ? r.body : null;
+      if (s && (s.state === "charging" || s.state === "pending_start" || s.state === "ended")) {
+        localStorage.setItem("activeSessionId", s.id);
+        resumeFromSession(s, c.qrSlug, null);
+      } else {
+        finishShowStart(c); // session vanished between the two calls — normal start
+      }
+    });
+    return true; // handled asynchronously
   }
 
   function renderStart() {
@@ -629,6 +654,10 @@
        (and only if it points at this receipt's session, never a live one). */
     if (receiptSession && localStorage.getItem("activeSessionId") === receiptSession.id) {
       localStorage.removeItem("activeSessionId");
+    }
+    if (receiptSession) {
+      /* Tell the server too, so a later QR scan doesn't resurrect this receipt. */
+      post("/sessions/" + receiptSession.id + "/ack");
     }
     receiptSession = null;
     session = null;
