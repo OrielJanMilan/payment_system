@@ -2,12 +2,18 @@ import express from "express";
 import { config } from "./config.ts";
 import { db, migrate } from "./db/db.ts";
 import { seed } from "./db/seed.ts";
+import { chargersRouter } from "./modules/chargers/router.ts";
+import { sessionsRouter } from "./modules/sessions/router.ts";
+import { startExpirySweep } from "./modules/sessions/service.ts";
 
 migrate();
 seed();
+startExpirySweep();
 
 const app = express();
 app.use(express.json());
+app.use(chargersRouter);
+app.use(sessionsRouter);
 
 app.get("/health", (_req, res) => {
   const row = db.prepare("SELECT COUNT(*) AS n FROM chargers").get() as { n: number };

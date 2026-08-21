@@ -39,3 +39,29 @@ export interface ConnectorDto {
   maxKw: number;
   status: ConnectorStatus;
 }
+
+export interface SessionDto {
+  id: string;
+  state: SessionState;
+  chargerCode: string;
+  siteName: string;
+  bay: string;
+  connectorId: number;
+  tariffCentavosPerKwh: number;
+  holdCentavos: number;
+  createdAt: string;
+  expiresAt: string;
+  startedAt: string | null;
+  endedAt: string | null;
+  meterStartWh: number | null;
+  meterStopWh: number | null;
+  billedWh: number | null;
+  amountCentavos: number | null;
+  receiptNo: string | null;
+  stopReason: string | null;
+}
+
+/* Envelope streamed over GET /sessions/{id}/events (SSE). */
+export type SessionEvent =
+  | { type: "state"; state: SessionState; session: SessionDto }
+  | { type: "meter"; energyWh: number; powerKw: number; soc: number | null; at: string };

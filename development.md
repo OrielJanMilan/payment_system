@@ -32,12 +32,12 @@ References: [BACKEND.md](BACKEND.md) · [SCREEN_FUNCTIONALITY.md](SCREEN_FUNCTIO
 
 ## Phase 2 — Sessions module + charger registry (API surface the UI needs)
 
-- ❌ 2.1 `GET /chargers/{code}` — charger lookup by printed code (S1 "Go" button) with connector status
-- ❌ 2.2 `GET /c/{qr_slug}` deep-link route — resolves slug → charger, serves the PWA landed on the Start screen (invalid slug → S1 error state)
-- ❌ 2.3 `POST /sessions` — create session in `pending_payment`, pin the tariff, compute the hold server-side; 10-min expiry
-- ❌ 2.4 Session state machine: `pending_payment → pending_start → charging → ended` (+ `expired`, `start_failed`) with idempotent transitions
-- ❌ 2.5 `GET /sessions/{id}` — session detail (state, kWh, running ₱, receipt fields)
-- ❌ 2.6 `GET /sessions/{id}/events` — SSE stream for the Live screen (state changes + meter samples)
+- ✅ 2.1 `GET /chargers/{code}` — charger lookup by printed code (case-insensitive) with connector status; 404 on unknown
+- ✅ 2.2 `GET /c/{qr_slug}` deep-link route — resolves slug, redirects to the app shell (`/?c={slug}`; invalid → `/?error=charger-not-found` for the S1 error state); plus `GET /chargers/by-slug/{slug}` for the client's data load
+- ✅ 2.3 `POST /sessions` — creates session in `pending_payment`, pins the tariff, computes the hold server-side, atomically claims the connector (409 when unavailable); 10-min TTL
+- ✅ 2.4 Session state machine (`modules/sessions/service.ts`) — guarded idempotent transitions incl. `expired` (lazy on read + 30 s sweep) and `start_failed`; connector released on terminal states; 23-check smoke test (`npm run smoke`)
+- ✅ 2.5 `GET /sessions/{id}` — session detail (state, pinned tariff/hold, meter + billing fields)
+- ✅ 2.6 `GET /sessions/{id}/events` — SSE stream: initial state snapshot, published state/meter events, 15 s heartbeats
 
 ## Phase 3 — Mock Maya payment provider
 
